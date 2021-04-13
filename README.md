@@ -29,7 +29,7 @@ $ docker run -d -p 5000:5000 -v /path/to/local/dir:/app/data cesura/pastey:lates
 ```
 Change **/path/to/local/dir** to a local folder you would like to use for persistent paste storage. It will be mounted in the container at **/app/data**.
 
-Pastey will then be accessable at *http://localhost:5000*
+Pastey will then be accessible at *http://localhost:5000*
 
 ### Docker (non-AVX processor)
 If your processor does not have support for AVX instructions, the "latest" image will fail to run. This is due to a decision by Tensorflow to enable this compile flag by default in version 1.5+. However, Anaconda's distribution of Tensorflow supports older architectures even in the 2.x line. You can instead use the image tagged ***latest-conda***:
