@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>{{ paste.title }} | Pastey</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <link rel="stylesheet" href="/static/css/mdb.min.css" />
+    <link rel="stylesheet" href="/static/css/prettify.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+</head>
+<body>
+  <header>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+      <div class="container-fluid">
+
+        <!-- Navbar logo -->
+        <a class="navbar-brand" href="/">
+          <img src="/static/img/pastey.png" height="26" alt="" loading="lazy" style="margin-top: -3px;" />
+        </a>
+
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/new" rel="nofollow">New Paste</a>
+            </li>
+            {% if whitelisted %}
+            <li class="nav-item">
+              <a class="nav-link" href="/config">Config</a>
+            </li>
+            {% endif %}
+          </ul>
+
+          <ul class="navbar-nav d-flex flex-row">
+            <li class="nav-item me-3 me-lg-0">
+              <a class="nav-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Navbar -->
+
+    <!-- Jumbotron -->
+    <div id="intro" class="p-5 text-center bg-light">
+      {% if paste.encrypted %}
+        <img src="/static/img/encrypted.png" width="30px" height="30px" /><br /><br />
+      {% else %}
+        <img src="/static/img/unencrypted.png" width="30px" height="30px" /><br /><br />
+      {% endif %}
+      <h1 class="mb-3 h2">{{ paste.title }}</h1>
+      <span style="font-weight:bold;">Format: </span><span>{{ paste.language }}</span><br />
+      <span style="font-weight:bold;">Date: </span><span>{{ paste.timestamp }}</span><br /><br />
+      
+      <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-5">
+              <input class="form-control" id="paste-url" type="text" value="{{ url }}" readonly />
+          </div>
+          <div class="col-md-1">
+              <button type="button" class="btn btn-success" onclick="copyToClipboard()">Copy Link</button>
+          </div>
+      </div>
+      {% if paste.uses == 0 %}
+      <div class="row">
+        <div class="col-md-12">
+          <br /><span class="badge rounded-pill bg-warning text-dark">Warning: this paste has been set to single use. It will be deleted and unaccessible upon page reload.</span>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    <!-- Jumbotron -->
+  </header>
+
+  <!--Main layout-->
+  <main class="my-5">
+      <div class="container">
+          <form action="/paste" method="POST">
+              <div class="row">
+                  <div class="col-md-12 mb-4">
+                      <pre class="prettyprint linenums">{{ paste.content }}</pre>          
+                  </div>    
+              </div>
+          </form>
+      </div>
+  </main>
+  <!--Main layout-->
+
+  <!--JS-->
+  <script type="text/javascript" src="/static/js/mdb.min.js"></script>
+  <script type="text/javascript" src="/static/js/common.js"></script>
+  <script src="/static/js/prettify.min.js"></script>
+  <script src="/static/js/run_prettify.js"></script></body>
+</html>

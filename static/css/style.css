@@ -1,0 +1,18 @@
+.prettyprint ol.linenums > li { list-style-type: decimal; }
+
+#intro {
+    margin-top: 58px;
+}
+@media (max-width: 991px) {
+    #intro {
+        margin-top: 45px;
+    }
+}
+
+.paste-checkbox {
+    padding-bottom: 20px;
+}
+
+.error {
+    font-size: 60px;
+}

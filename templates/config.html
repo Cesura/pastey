@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Config | Pastey</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <link rel="stylesheet" href="/static/css/mdb.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
+</head>
+<body>
+  <header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+      <div class="container-fluid">
+
+        <!-- Navbar logo -->
+        <a class="navbar-brand" href="/">
+          <img src="/static/img/pastey.png" height="26" alt="" loading="lazy" style="margin-top: -3px;" />
+        </a>
+
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/new">New Paste</a>
+            </li>
+            {% if whitelisted %}
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/config">Config</a>
+            </li>
+            {% endif %}
+          </ul>
+
+          <ul class="navbar-nav d-flex flex-row">
+            <li class="nav-item me-3 me-lg-0">
+              <a class="nav-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Navbar -->
+
+    <!-- Jumbotron -->
+    <div id="intro" class="p-5 text-center bg-light">
+      <h1 class="mb-3 h2">Config</h1>
+    </div>
+    <!-- Jumbotron -->
+  </header>
+
+  <!--Main layout-->
+  <main class="my-5">
+      <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Option</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for key, value in config_items.items() %}
+                  <tr>
+                    <th scope="row">{{ key}}</th>
+                    <td>{{ value }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div><br />
+
+          <div class="row text-center">
+            <div class="col-md-12">
+              <h1 class="mb-3 h4">Download Script</h1>
+              <p>Pastey provides a script that can be used to paste output directly from the command line:</p>
+              <pre>$ cat /var/log/nginx.log | pastey</pre>
+              <pre>$ echo "Hello, Pastey!" | pastey</pre>
+              <p style="font-weight:bold;">Download the following, make it executable, and put it in your system PATH to be used anywhere!</p>
+            </div>
+          </div><br />
+
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-5">
+                <input class="form-control" id="paste-url" type="text" value="{{ script_url }}" readonly />
+            </div>
+            <div class="col-md-1">
+                <a href="{{ script_url }}">
+                  <button type="button" class="btn btn-success">Download</button>
+                </a>
+            </div>
+        </div>
+  
+      </div>
+  </main>
+  <!--Main layout-->
+
+  <!--JS-->
+  <script type="text/javascript" src="/static/js/mdb.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+flask
+Flask-Limiter==1.4
+guesslang
+cryptography
