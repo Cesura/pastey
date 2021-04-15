@@ -6,7 +6,7 @@ from os import environ
 from distutils.util import strtobool
 from threading import Thread
 
-pastey_version = "0.3"
+pastey_version = "0.3.1"
 loaded_config = {}
 loaded_themes = []
 
@@ -45,6 +45,7 @@ if __name__ == "__main__":
     print("Pastey version ", pastey_version)
     print("USING THE FOLLOWING CONFIGURATION:")
     print("=====================================")
+    loaded_config['pastey_version'] = pastey_version
     for option in dir(config):
         if not option.startswith("__"):
             loaded_config[option] = eval("config.%s" % option)

@@ -18,18 +18,25 @@ def get_recent(limit=config.recent_pastes):
     recent_pastes = []
     i = 0
     while i < limit and i < len(paths):
-        with open(paths[i]) as fp:
-            paste = json.loads(fp.read())
+        if paths[i].is_file():
+            with open(paths[i]) as fp:
+                try:
+                    paste = json.loads(fp.read())
+                except json.JSONDecodeError:
+                    i += 1
+                    continue
 
-            basename = path.basename(paths[i])
-            paste['unique_id'] = basename[:-8] if basename.endswith(".expires") else basename
-            paste['content'] = '\n'.join(paste['content'].splitlines()[0:10])
-            paste['icon'] = common.get_icon(paste['language'])
+                # Set extra metadata
+                basename = path.basename(paths[i])
+                paste['unique_id'] = basename[:-8] if basename.endswith(".expires") else basename
+                paste['content'] = '\n'.join(paste['content'].splitlines()[0:10])
+                paste['icon'] = common.get_icon(paste['language'])
 
-            if paste['encrypted']:
-                paste['content'] = "[Encrypted]"
+                # Replace preview if encrypted
+                if paste['encrypted']:
+                    paste['content'] = "[Encrypted]"
 
-            recent_pastes.append(paste)
+                recent_pastes.append(paste)
         i += 1
 
     return recent_pastes
@@ -40,7 +47,10 @@ def get_paste(unique_id, key=""):
 
     if file_path is not None:
         with open(file_path, "r") as fp:
-            paste = json.loads(fp.read())
+            try:
+                paste = json.loads(fp.read())
+            except json.JSONDecodeError:
+                return None
 
         # Check if paste is expired
         if common.is_expired(paste):

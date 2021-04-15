@@ -1,4 +1,4 @@
-flask
+Flask==1.1.2
 Flask-Limiter==1.4
-guesslang
-cryptography
+guesslang==2.0.1
+cryptography==3.4.7
