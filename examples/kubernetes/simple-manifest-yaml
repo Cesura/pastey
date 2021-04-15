@@ -1,0 +1,156 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pastebin
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pastey-data
+  namespace: pastebin
+  labels:
+    app.kubernetes.io/name: pastey
+spec:
+  accessModes:
+    - "ReadWriteMany"
+  resources:
+    requests:
+      storage: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pastey-web
+  namespace: pastebin
+  labels:
+    app.kubernetes.io/name: pastey
+spec:
+  type: ClusterIP
+  ports:
+    - name: web
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
+  selector:
+    app.kubernetes.io/name: pastey
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pastey
+  namespace: pastebin
+  labels:
+    app.kubernetes.io/name: pastey
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pastey
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pastey
+    spec:
+      initContainers:
+      containers:
+        - name: pastey
+          image: cesura/pastey:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: web
+              containerPort: 5000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web
+              scheme: HTTP
+            initialDelaySeconds: 0
+            failureThreshold: 5
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web
+              scheme: HTTP
+            initialDelaySeconds: 0
+            failureThreshold: 5
+            timeoutSeconds: 10
+          env:
+            - name: PASTEY_DATA_DIRECTORY
+              value: "./data"
+            - name: PASTEY_LISTEN_ADDRESS
+              value: "0.0.0.0"
+            - name: PASTEY_LISTEN_PORT
+              value: "5000"
+            - name: PASTEY_USE_WHITELIST
+              value: "True"
+            - name: PASTEY_WHITELIST_CIDR
+              value: "127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+            #- name: PASTEY_BLACKLIST_CIDR
+            #  value: ""
+            - name: PASTEY_RESTRICT_PASTING
+              value: "True"
+            - name: PASTEY_RESTRICT_RAW_PASTING
+              value: "True"
+            - name: PASTEY_RATE_LIMIT
+              value: "5/hour"
+            - name: PASTEY_GUESS_THRESHOLD
+              value: "0.20"
+            - name: PASTEY_RECENT_PASTES
+              value: "20"
+            - name: PASTEY_BEHIND_PROXY
+              value: "True"
+            - name: PASTEY_SHOW_CLI_BUTTON
+              value: "False"
+          volumeMounts:
+          - mountPath: /data
+            name: pastey-data
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: antiaffinity
+                operator: In
+                values:
+                - pastey-instance
+            topologyKey: kubernetes.io/hostname
+      volumes:
+      - name: pastey-data
+        persistentVolumeClaim:
+          claimName: pastey-data
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pastey
+  namespace: pastebin
+  labels:
+    app.kubernetes.io/name: pastey
+  annotations:
+    cert-manager.io/cluster-issuer: acme
+    kubernetes.io/ingress.class: ingress-nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # https://kubernetes.github.io/ingress-nginx/examples/affinity/cookie/
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/affinity-mode: balanced
+    nginx.ingress.kubernetes.io/session-cookie-name: pastey
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "30"
+spec:
+  tls:
+    - hosts:
+        - "pastebin.example.com"
+      secretName: pastey
+  rules:
+    - host: pastebin.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pastey-web
+                port:
+                  number: 5000
