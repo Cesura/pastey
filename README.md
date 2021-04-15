@@ -15,11 +15,13 @@ A lightweight, self-hosted paste platform
 
 ## Screenshots
 ### Browser
-![screenshot1](https://i.imgur.com/rQ5ZIg7.png)
-![screenshot2](https://i.imgur.com/zaDpBaX.png)
-![screenshot3](https://i.imgur.com/XDlJDZS.png)
+![screenshot1](https://i.imgur.com/QK9L6A5.png)
+![screenshot2](https://i.imgur.com/G2Ur9Xu.png)
+![screenshot3](https://i.imgur.com/8dEy9qT.png)
+### Dark
+![screenshot4](https://i.imgur.com/U6QRU9S.png)
 ### CLI
-![screenshot4](https://i.imgur.com/FFWGe43.png)
+![screenshot5](https://i.imgur.com/FFWGe43.png)
 
 # Installation
 ### Docker
