@@ -18,7 +18,7 @@ A lightweight, self-hosted paste platform
 ## Screenshots
 ### Browser
 ![screenshot1](https://i.imgur.com/uMUdXnW.png)
-![screenshot2](https://i.imgur.com/G2Ur9Xu.png)
+![screenshot2](https://i.imgur.com/sNxHUCc.png)
 ![screenshot3](https://i.imgur.com/8dEy9qT.png)
 ### Dark
 ![screenshot4](https://i.imgur.com/U6QRU9S.png)
