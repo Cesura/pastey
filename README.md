@@ -7,6 +7,8 @@ A lightweight, self-hosted paste platform
 * Automatic programming language detection
 * Optional on-disk encryption
 * Optional single use pastes
+* Optional expiration date
+* Theme system
 * IP/network whitelisting and blocking
 * Endpoint rate limiting
 * Fully configurable via environment variables
