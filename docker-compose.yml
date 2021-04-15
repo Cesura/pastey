@@ -1,0 +1,10 @@
+services:
+  pastey:
+    image: cesura/pastey:latest
+    volumes:
+     - "pastey-data:/app/data"
+    ports:
+      - "5000:5000"
+
+volumes:
+  pastey-data:
