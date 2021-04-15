@@ -94,7 +94,7 @@
               <input class="form-control pastey-input" id="paste-url" type="text" value="{{ url }}" readonly />
           </div>
           <div class="col-md-1">
-              <button type="button" class="btn btn-success" onclick="copyToClipboard()">Copy Link</button>
+              <button type="button" class="btn btn-success text-nowrap" onclick="copyToClipboard()">Copy Link</button>
           </div>
       </div>
       {% if paste.uses == 0 %}
@@ -114,7 +114,7 @@
           <form action="/paste" method="POST">
               <div class="row">
                   <div class="col-md-12 mb-4">
-                      <pre class="prettyprint linenums">{% if paste.language == 'Plaintext' %}<span class="nocode">{% endif %}{{ paste.content }}{% if paste.language == 'Plaintext' %}</span>{% endif %}</pre>          
+                      <pre class="prettyprint linenums">{{ paste.content }}</pre>          
                   </div>    
               </div>
           </form>

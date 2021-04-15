@@ -79,16 +79,13 @@
       <h1 class="mb-3 h2">Welcome to Pastey</h1>
       <p class="mb-3">A lightweight, self-hosted paste platform</p><br />
       <div class="row justify-content-md-center">
-        <div class="col-md-1">
-          <a class="btn btn-primary m-2" href="/new" role="button" rel="nofollow">New Paste</a>
+        <div class="col-md-2">
+          <a class="btn btn-primary text-nowrap m-2" href="/new" role="button" rel="nofollow">New Paste</a>
         </div>
 
         {% if show_cli_button %}
-        <div class="col-md-1">
-          <div style="margin-top:8px; font-weight:bold; font-size:18px;">or</div>
-        </div>
-        <div class="col-md-1">
-          <a class="btn btn-success m-2" href="{{ script_url }}" role="button"
+        <div class="col-md-2">
+          <a class="btn btn-success text-nowrap m-2" href="{{ script_url }}" role="button"
             data-mdb-toggle="tooltip"
             title="Pastey provides a script that can be used to pipe output directly from the command line">Use CLI</a>
         </div>
