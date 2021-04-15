@@ -141,7 +141,7 @@ def raw():
         abort(401)
 
     # Create paste
-    unique_id, key = new_paste("Untitled", request.data.decode('utf-8'), source_ip, single=False, encrypt=False)
+    unique_id, key = functions.new_paste("Untitled", request.data.decode('utf-8'), source_ip, single=False, encrypt=False)
     link = request.url.rsplit('/', 1)[0] + "/view/" + unique_id
 
     return link, 200
