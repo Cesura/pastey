@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, abort
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from guesslang import Guess
 from os import environ
 from distutils.util import strtobool
 from threading import Thread
@@ -15,7 +14,7 @@ limiter = Limiter(
     app,
     key_func=get_remote_address
 )
-guess = Guess()
+
 
 from pastey import config, common, routes, functions
 
