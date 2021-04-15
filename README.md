@@ -41,6 +41,13 @@ If your processor does not have support for AVX instructions, the "latest" image
 $ docker run -d -p 5000:5000 -v /path/to/local/dir:/app/data cesura/pastey:latest-conda
 ```
 
+### docker-compose
+If you prefer to use docker-compose:
+```
+$ git clone https://github.com/Cesura/pastey.git && cd pastey && docker-compose up -d
+```
+Note that this must be modified if you wish to use a local directory for storage, rather than a Docker volume.
+
 ### Local
 Requirements:
 * Python 3.8
