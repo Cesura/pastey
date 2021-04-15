@@ -4,9 +4,14 @@ from . import config, common, functions
 from flask import Flask, render_template, request, redirect, abort
 from urllib.parse import quote
 from datetime import datetime
+from os import environ
 
 # Load themes
 loaded_themes = common.get_themes()
+
+# Set rate limit
+# Workaround for @limiter annotations being parsed early
+config.rate_limit = environ["PASTEY_RATE_LIMIT"] if "PASTEY_RATE_LIMIT" in environ else config.rate_limit
 
 ########## Routes ##########
 
