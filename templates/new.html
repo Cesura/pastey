@@ -9,38 +9,61 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
     <link rel="stylesheet" href="/static/css/mdb.min.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/themes/{{ active_theme }}.css" />
 
     <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
 </head>
 <body>
   <header>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top bg-white pastey-navbar">
       <div class="container-fluid">
 
         <!-- Navbar logo -->
         <a class="navbar-brand" href="/">
-          <img src="/static/img/pastey.png" height="26" alt="" loading="lazy" style="margin-top: -3px;" />
+          <div class="pastey-logo" style="margin-top: -3px;"></div>
         </a>
 
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item active">
-              <a class="nav-link" href="/">Home</a>
+              <a class="nav-link pastey-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/new">New Paste</a>
+              <a class="nav-link pastey-link" aria-current="page" href="/new">New Paste</a>
             </li>
             {% if whitelisted %}
             <li class="nav-item">
-              <a class="nav-link" href="/config">Config</a>
+              <a class="nav-link pastey-link" href="/config">Config</a>
             </li>
             {% endif %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle pastey-link"
+                href="#"
+                id="theme"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Theme
+              </a>
+              <!-- Theme dropdown -->
+              <ul class="dropdown-menu pastey-dropdown" aria-labelledby="navbarDropdown">
+                {% for theme in themes %}
+                <li><a class="dropdown-item pastey-dropdown-item" href="#" onclick="setTheme('{{ theme }}');">{{ theme }}</a></li>
+                {% endfor %}
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item pastey-dropdown-item" href="#" onclick="resetTheme();">Reset Theme</a>
+                </li>
+              </ul>
+            </li>
           </ul>
 
           <ul class="navbar-nav d-flex flex-row">
             <li class="nav-item me-3 me-lg-0">
-              <a class="nav-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
+              <a class="nav-link pastey-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
                 <i class="fab fa-github"></i>
               </a>
             </li>
@@ -51,7 +74,7 @@
     <!-- Navbar -->
 
     <!-- Jumbotron -->
-    <div id="intro" class="p-5 text-center bg-light">
+    <div id="intro" class="p-5 text-center pastey-header">
       <h1 class="mb-3 h2">New Paste</h1>
     </div>
     <!-- Jumbotron -->
@@ -65,8 +88,8 @@
                   <div class="col-md-6 mb-4">
                       <div class="md-form">
                           <div class="form-outline">
-                              <input type="text" id="title" name="title" class="form-control" />
-                              <label class="form-label" for="title">Paste Title</label>
+                              <input type="text" id="title" name="title" class="form-control pastey-input" />
+                              <label class="form-label pastey-input-title" for="title">Paste Title</label>
                           </div>
                       </div>
                   </div>
@@ -75,14 +98,14 @@
               <div class="row">
                   <div class="col-md-12 mb-4">
                       <div class="md-form">
-                          <textarea name="content" id="content" class="md-textarea form-control" rows="20"></textarea>
+                          <textarea name="content" id="content" class="md-textarea form-control pastey-input" rows="20"></textarea>
                       </div>
                   </div>
               </div>
 
               <div class="row">
                   <div class="col-md-2">
-                    <div class="form-check paste-checkbox">
+                    <div class="form-check pastey-checkbox">
                       <input class="form-check-input" type="checkbox" value="" id="encrypt" name="encrypt"
                         data-mdb-toggle="tooltip" title="Your paste's content will not be accessible without its accompanying decryption key" />
                       <label class="form-check-label" for="encrypt">
@@ -92,7 +115,7 @@
                   </div>
 
                   <div class="col-md-2">
-                    <div class="form-check paste-checkbox">
+                    <div class="form-check pastey-checkbox">
                       <input class="form-check-input" type="checkbox" value="" id="single" name="single" 
                         data-mdb-toggle="tooltip" title="After generation, the paste will be viewable one time before deletion" />
                       <label class="form-check-label" for="single">
@@ -100,8 +123,19 @@
                       </label>
                     </div>
                   </div>
-                  <div class="col-md-4"></div>
-
+                  <div class="col-md-3">
+                    <select class="form-select form-select-md mb-3 pastey-select" id="expiration" name="expiration">
+                      <option value="-1" selected>Expires never</option>
+                      <option value="1">Expires in 1 hour</option>
+                      <option value="6">Expires in 6 hours</option>
+                      <option value="24">Expires in 1 day</option>
+                      <option value="72">Expires in 3 days</option>
+                      <option value="168">Expires in 1 week</option>
+                      <option value="672">Expires in 4 weeks</option>
+                      <option value="8760">Expires in 1 year</option>
+                    </select>
+                  </div>
+                  <div class="col-md-1"></div>
                   <div class="col-md-4">
                       <button type="submit" class="btn btn-primary btn-block">Paste</button>
                   </div>
@@ -113,5 +147,6 @@
 
   <!--JS-->
   <script type="text/javascript" src="/static/js/mdb.min.js"></script>
+  <script type="text/javascript" src="/static/js/common.js"></script>
 </body>
 </html>

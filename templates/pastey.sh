@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Install this script into your PATH and chmod +x
+# Usage example:
+# $ cat /var/log/nginx.log | pastey
+
 if ! command -v curl &> /dev/null ; then
     echo "Please install curl to use this script"
     exit 1

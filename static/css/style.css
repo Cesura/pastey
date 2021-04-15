@@ -7,12 +7,34 @@
     #intro {
         margin-top: 45px;
     }
+    .pastey-checkbox {
+        margin-bottom:20px;
+    }
 }
 
-.paste-checkbox {
-    padding-bottom: 20px;
+.tooltip {
+    pointer-events: none;
+}
+
+.prettyprint {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
 
 .error {
     font-size: 60px;
+}
+
+.pastey-logo {
+    width:160px;
+    height:26px;
+    background-size: 160px 26px;
+}
+
+.pastey-checkbox {
+    padding-top:10px;
 }

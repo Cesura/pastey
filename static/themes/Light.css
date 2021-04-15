@@ -1,0 +1,19 @@
+.pastey-logo {
+    background-image: url('/static/img/pastey.png');
+}
+
+.pastey-link {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.pastey-link:hover {
+    color: rgba(0, 0, 0, 0.70);;
+}
+
+/* 
+    Syntax highlighting 
+    See Google prettify for more details
+*/
+.pun {
+    color: rgba(0, 0, 0);
+}

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/static/css/mdb.min.css" />
     <link rel="stylesheet" href="/static/css/prettify.min.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/themes/{{ active_theme }}.css" />
 
     <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
 </head>
@@ -17,32 +18,54 @@
   <header>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top bg-white pastey-navbar">
       <div class="container-fluid">
 
         <!-- Navbar logo -->
         <a class="navbar-brand" href="/">
-          <img src="/static/img/pastey.png" height="26" alt="" loading="lazy" style="margin-top: -3px;" />
+          <div class="pastey-logo" style="margin-top: -3px;"></div>
         </a>
 
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item active">
-              <a class="nav-link" href="/">Home</a>
+              <a class="nav-link pastey-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/new" rel="nofollow">New Paste</a>
+              <a class="nav-link pastey-link" href="/new" rel="nofollow">New Paste</a>
             </li>
             {% if whitelisted %}
             <li class="nav-item">
-              <a class="nav-link" href="/config">Config</a>
+              <a class="nav-link pastey-link" href="/config">Config</a>
             </li>
             {% endif %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle pastey-link"
+                href="#"
+                id="theme"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Theme
+              </a>
+              <!-- Theme dropdown -->
+              <ul class="dropdown-menu pastey-dropdown" aria-labelledby="navbarDropdown">
+                {% for theme in themes %}
+                <li><a class="dropdown-item pastey-dropdown-item" href="#" onclick="setTheme('{{ theme }}');">{{ theme }}</a></li>
+                {% endfor %}
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item pastey-dropdown-item" href="#" onclick="resetTheme();">Reset Theme</a>
+                </li>
+              </ul>
+            </li>
           </ul>
 
           <ul class="navbar-nav d-flex flex-row">
             <li class="nav-item me-3 me-lg-0">
-              <a class="nav-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
+              <a class="nav-link pastey-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
                 <i class="fab fa-github"></i>
               </a>
             </li>
@@ -53,7 +76,7 @@
     <!-- Navbar -->
 
     <!-- Jumbotron -->
-    <div id="intro" class="p-5 text-center bg-light">
+    <div id="intro" class="p-5 text-center pastey-header">
       {% if paste.encrypted %}
         <img src="/static/img/encrypted.png" width="30px" height="30px" /><br /><br />
       {% else %}
@@ -61,12 +84,14 @@
       {% endif %}
       <h1 class="mb-3 h2">{{ paste.title }}</h1>
       <span style="font-weight:bold;">Format: </span><span>{{ paste.language }}</span><br />
-      <span style="font-weight:bold;">Date: </span><span>{{ paste.timestamp }}</span><br /><br />
-      
+      <span style="font-weight:bold;">Date: </span><span>{{ paste.timestamp }}</span><br />
+      {% if paste.expiration is defined and paste.expiration != "" %}
+        <span style="font-weight:bold;">Expires: </span><span>{{ paste.expiration }}</span><br />
+      {% endif %}<br />
       <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-5">
-              <input class="form-control" id="paste-url" type="text" value="{{ url }}" readonly />
+              <input class="form-control pastey-input" id="paste-url" type="text" value="{{ url }}" readonly />
           </div>
           <div class="col-md-1">
               <button type="button" class="btn btn-success" onclick="copyToClipboard()">Copy Link</button>
@@ -89,7 +114,7 @@
           <form action="/paste" method="POST">
               <div class="row">
                   <div class="col-md-12 mb-4">
-                      <pre class="prettyprint linenums">{{ paste.content }}</pre>          
+                      <pre class="prettyprint linenums">{% if paste.language == 'Plaintext' %}<span class="nocode">{% endif %}{{ paste.content }}{% if paste.language == 'Plaintext' %}</span>{% endif %}</pre>          
                   </div>    
               </div>
           </form>

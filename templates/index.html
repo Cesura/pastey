@@ -10,37 +10,61 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
   <link rel="stylesheet" href="/static/css/mdb.min.css" />
   <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/themes/{{ active_theme }}.css" />
+
   <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
 </head>
 <body>
   <header>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top bg-white pastey-navbar">
       <div class="container-fluid">
 
         <!-- Navbar logo -->
         <a class="navbar-brand" href="/">
-          <img src="/static/img/pastey.png" height="26" alt="" loading="lazy" style="margin-top: -3px;" />
+          <div class="pastey-logo" style="margin-top: -3px;"></div>
         </a>
 
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item active">
-              <a class="nav-link" aria-current="page" href="/">Home</a>
+              <a class="nav-link pastey-link" aria-current="page" href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/new">New Paste</a>
+              <a class="nav-link pastey-link" href="/new">New Paste</a>
             </li>
             {% if whitelisted %}
             <li class="nav-item">
-              <a class="nav-link" href="/config">Config</a>
+              <a class="nav-link pastey-link" href="/config">Config</a>
             </li>
             {% endif %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle pastey-link"
+                href="#"
+                id="theme"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Theme
+              </a>
+              <!-- Theme dropdown -->
+              <ul class="dropdown-menu pastey-dropdown" aria-labelledby="navbarDropdown">
+                {% for theme in themes %}
+                <li><a class="dropdown-item pastey-dropdown-item" href="#" onclick="setTheme('{{ theme }}');">{{ theme }}</a></li>
+                {% endfor %}
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item pastey-dropdown-item" href="#" onclick="resetTheme();">Reset Theme</a>
+                </li>
+              </ul>
+            </li>
           </ul>
 
           <ul class="navbar-nav d-flex flex-row">
             <li class="nav-item me-3 me-lg-0">
-              <a class="nav-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
+              <a class="nav-link pastey-link" href="https://github.com/Cesura/pastey" rel="nofollow" target="_blank">
                 <i class="fab fa-github"></i>
               </a>
             </li>
@@ -51,10 +75,25 @@
     <!-- Navbar -->
 
     <!-- Jumbotron -->
-    <div id="intro" class="p-5 text-center bg-light">
+    <div id="intro" class="p-5 text-center pastey-header">
       <h1 class="mb-3 h2">Welcome to Pastey</h1>
-      <p class="mb-3">A lightweight, self-hosted paste platform</p>
-      <a class="btn btn-primary m-2" href="/new" role="button" rel="nofollow">New Paste</a>
+      <p class="mb-3">A lightweight, self-hosted paste platform</p><br />
+      <div class="row justify-content-md-center">
+        <div class="col-md-1">
+          <a class="btn btn-primary m-2" href="/new" role="button" rel="nofollow">New Paste</a>
+        </div>
+
+        {% if show_cli_button %}
+        <div class="col-md-1">
+          <div style="margin-top:8px; font-weight:bold; font-size:18px;">or</div>
+        </div>
+        <div class="col-md-1">
+          <a class="btn btn-success m-2" href="{{ script_url }}" role="button"
+            data-mdb-toggle="tooltip"
+            title="Pastey provides a script that can be used to pipe output directly from the command line">Use CLI</a>
+        </div>
+        {% endif %}
+      </div>      
     </div>
     <!-- Jumbotron -->
   </header>
@@ -69,7 +108,7 @@
             {% for paste in pastes %}
             <div class="row">
               <div class="col-md-4 mb-4">
-                <div class="bg-image hover-overlay shadow-1-strong rounded ripple" data-mdb-ripple-color="light">
+                <div class="bg-image hover-overlay shadow-1-strong rounded ripple pastey-preview-image" data-mdb-ripple-color="light">
                   <img src="/static/img/language/{{ paste.icon }}.png" class="img-fluid" />
                   <a href="/view/{{ paste.unique_id }}">
                     <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
@@ -78,7 +117,9 @@
               </div>
 
               <div class="col-md-8 mb-4">
+                {% if whitelisted %}
                 <a class="btn btn-danger m-2" href="/delete/{{ paste.unique_id }}" role="button" style="float:right;">Delete</a>
+                {% endif %}
 
                 <h5>{{ paste.title }}</h5>
                 <pre style="overflow-x:hidden;">{{ paste.content }}</pre>
@@ -93,5 +134,6 @@
 
   <!--JS-->
   <script type="text/javascript" src="/static/js/mdb.min.js"></script>
+  <script type="text/javascript" src="/static/js/common.js"></script>
 </body>
 </html>

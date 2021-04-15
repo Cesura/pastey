@@ -1,0 +1,105 @@
+body, tr {
+    background-color: #262626 !important;
+    color: rgba(255, 255, 255);
+}
+
+.pastey-logo {
+    background-image: url('/static/img/pastey-dark.png');
+}
+
+.pastey-navbar {
+    background-color: #262626 !important;
+}
+
+.pastey-link {
+    color: rgba(255, 255, 255, 0.80);
+}
+
+.pastey-link:hover {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.pastey-header {
+    background-color: #2f2f2f;
+}
+
+.pastey-input {
+    color: rgba(255, 255, 255) !important;
+    background-color: #2f2f2f !important;
+}
+
+.pastey-input-title {
+    color: rgba(255, 255, 255) !important;
+}
+
+.pastey-preview-image {
+    background-color: #2f2f2f;
+}
+
+.pastey-select {
+    background-color: #2f2f2f;
+    color: rgba(255, 255, 255);
+}
+
+.nocode {
+    color: rgb(255,255,255) !important;
+}
+
+/* Google prettify elements */
+
+/* Alternating line colors */
+li.L1,li.L3,li.L5,li.L7,li.L9 {
+    background:#2a2a2a;
+}
+
+li.L0,li.L2,li.L4,li.L6,li.L8 {
+    background:#222222;
+}
+
+/* 
+    Syntax highlighting 
+    See Google prettify for more details
+*/
+.pln, .pun {
+    color:  rgba(255, 255, 255);
+}
+
+.kwd {
+    color: rgb(152, 209, 255);
+}
+
+.com {
+    color: rgb(255, 51, 51);
+}
+
+.str {
+    color: rgb(0, 195, 0);
+}
+
+.lit {
+    color: rgb(0, 161, 161);
+}
+
+.tag {
+    color: rgb(0, 167, 218);
+}
+
+.atn {
+    color: rgb(248, 1, 248);
+}
+
+.atv {
+    color: rgb(0, 195, 0);
+}
+
+.dec, .var {
+    color: rgb(255, 2, 129);
+}
+
+.typ {
+    color: rgb(197, 0, 197);
+}
+
+.opn, .clo {
+    color: rgb(218, 218, 0);
+}
