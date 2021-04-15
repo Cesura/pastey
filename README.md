@@ -47,7 +47,7 @@ Requirements:
 * AVX-enabled processor (or a Python environment configured to use Anaconda's Tensorflow)
 
 ```
-$ git clone https://github.com/Cesura/pastey.git && cd pastey
+$ git clone https://github.com/Cesura/pastey.git && cd pastey && mkdir ./data
 $ pip3 install -r requirements.txt
 $ python3 app.py 
 ```
