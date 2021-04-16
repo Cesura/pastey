@@ -88,7 +88,14 @@ def is_expired(paste):
 
 # Build a URL, accounting for config options
 def build_url(request, path="/"):
-    protocol = request.url.split('//')[0] if not config.force_https_links else "https:"
     domain = request.url.split('//')[1].split("/")[0] if config.override_domain == "" else config.override_domain
-    
+
+    # Check for HTTPS headers
+    if 'X-Forwarded-Proto' in request.headers and request.headers['X-Forwarded-Proto'] == "https":
+        protocol = "https:"
+    elif 'X-Forwarded-Port' in request.headers and request.headers['X-Forwarded-Port'] == "443":
+        protocol = "https:"
+    else:
+        protocol = request.url.split('//')[0] if not config.force_https_links else "https:"
+
     return protocol + "//" + domain + path

@@ -21,9 +21,6 @@ blacklist_cidr = []
 # Restrict pasting functionality to whitelisted IPs
 restrict_pasting = False
 
-# Restrict raw pasting to whitelisted IPs
-restrict_raw_pasting = True
-
 # Rate limit for pasting (ignored for whitelisted users)
 rate_limit = "5/hour"
 
@@ -54,6 +51,8 @@ show_cli_button = True
 # Include https in the generated links instead of http
 # This assumes you are behind something else doing the SSL
 # termination, but want the users to see https links
+#
+# This is normally handled by the HTTP headers now
 force_https_links = False
 
 # This can be used to specify a different domain for generated links

@@ -129,15 +129,40 @@
 
           <div class="row justify-content-md-center">
             <div class="col-md-4">
-                <input class="form-control pastey-input" id="paste-url" type="text" value="{{ script_url }}" readonly />
+                <input class="form-control pastey-input pastey-view-url" id="paste-url" type="text" value="{{ script_url }}" readonly />
             </div>
             <div class="col-md-1">
                 <a href="{{ script_url }}">
                   <button type="button" class="btn btn-success text-nowrap"><i class="fas fa-download"></i>&nbsp;&nbsp;&nbsp;Download</button>
                 </a>
             </div>
-          </div>
+          </div><br />
   
+          <div class="row text-center">
+            <div class="col-md-12">
+              <h1 class="mb-3 h4">JSON</h1>
+              <p>You can also send a properly-formatted json POST request to <span style="font-weight:bold;">/json</span>:</p>
+            </div>
+          </div>
+
+          <div class="row justify-content-md-center">
+            <div class="col-md-3">
+<pre>{
+  "content": "This is a paste",
+  "title": "Interesting title",
+  "expiration": -1,
+  "encrypt": true,
+  "single": false
+}</pre>            
+            </div>
+          </div>
+
+          <div class="row text-center">
+            <div class="col-md-12">
+              <p>Note that <span style="font-weight:bold;">expiration</span> is some value in hours, and that -1 = no expiration date.
+              Only the <span style="font-weight:bold;">content</span> field is mandatory.</p>
+            </div>
+          </div>
       </div>
   </main>
   <!--Main layout-->

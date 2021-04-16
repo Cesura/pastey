@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, redirect, abort
 from urllib.parse import quote
 from datetime import datetime
 from os import environ
+import json
 
 # Load themes
 loaded_themes = common.get_themes()
@@ -116,33 +117,49 @@ def paste():
     if config.restrict_pasting and not common.verify_whitelist(source_ip):
         abort(401)
 
+    # Content field is necessary
+    if 'content' not in request.form:
+        abort(400)
+
     content = request.form['content']
 
     # Check if content is empty
-    if request.form['content'].strip() == "":
-        return redirect("/new")
+    if content.strip() == "":
+        if 'cli' in request.form:
+            abort(400)
+        else:
+            return redirect("/new")
     else:
 
         # Verify form options
-        title = request.form['title'] if request.form['title'].strip() != "" else "Untitled"
+        title = request.form['title'] if ('title' in request.form and request.form['title'].strip() != "") else "Untitled"
         single = True if 'single' in request.form else False
         encrypt = True if 'encrypt' in request.form else False
-        
+        expiration = int(request.form['expiration']) if 'expiration' in request.form else -1
+
         # Create paste
-        unique_id, key = functions.new_paste(title, content, source_ip, expires=int(request.form['expiration']), single=single, encrypt=encrypt)
+        unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt)
         if encrypt:
-            return redirect("/view/" + unique_id + "/" + quote(key))
+
+            # Return link if cli form option was set
+            if 'cli' in request.form:
+                return common.build_url(request, "/view/" + unique_id + "/" + quote(key)), 200
+            else:
+                return redirect("/view/" + unique_id + "/" + quote(key))
         else:
-            return redirect("/view/" + unique_id)
+            if 'cli' in request.form:
+                return common.build_url(request, "/view/" + unique_id), 200
+            else:
+                return redirect("/view/" + unique_id)
 
 # POST new raw paste
 @app.route('/raw', methods = ['POST'])
 @limiter.limit(config.rate_limit, exempt_when=lambda: common.verify_whitelist(common.get_source_ip(request)))
-def raw():
+def paste_raw():
     source_ip = common.get_source_ip(request)
     
     # Check if restrict pasting to whitelist CIDRs is enabled
-    if config.restrict_raw_pasting and not common.verify_whitelist(source_ip):
+    if config.restrict_pasting and not common.verify_whitelist(source_ip):
         abort(401)
 
     # Create paste
@@ -150,6 +167,44 @@ def raw():
     link = common.build_url(request, "/view/" + unique_id)
 
     return link, 200
+
+# POST new json paste
+@app.route('/json', methods = ['POST'])
+@limiter.limit(config.rate_limit, exempt_when=lambda: common.verify_whitelist(common.get_source_ip(request)))
+def paste_json():
+    source_ip = common.get_source_ip(request)
+    
+    # Check if restrict pasting to whitelist CIDRs is enabled
+    if config.restrict_pasting and not common.verify_whitelist(source_ip):
+        abort(401)
+
+    # Check json integrity
+    try:
+        paste = json.loads(request.data)
+    except json.JSONDecodeError:
+        abort(400)
+    
+    # Content field is mandatory
+    if 'content' not in paste or paste['content'].strip() == "":
+        abort(400)
+    content = paste['content']
+
+    # Optional fields
+    title = paste['title'] if ('title' in paste and paste['title'].strip() != "") else "Untitled"
+    single = paste['single'] if ('single' in paste and type(paste['single']) == bool) else False
+    encrypt = paste['encrypt'] if ('encrypt' in paste and type(paste['encrypt']) == bool) else False
+    expiration = paste['expiration'] if ('expiration' in paste and type(paste['expiration']) == int) else -1
+
+    # Create paste
+    unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt)
+    if encrypt:
+        return {
+            "link": common.build_url(request, "/view/" + unique_id + "/" + quote(key))
+        }, 200
+    else:
+        return {
+            "link": common.build_url(request, "/view/" + unique_id)
+        }, 200
 
 # Custom 404 handler
 @app.errorhandler(404)

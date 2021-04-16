@@ -6,7 +6,7 @@ from os import environ
 from distutils.util import strtobool
 from threading import Thread
 
-pastey_version = "0.4"
+pastey_version = "0.4.1"
 loaded_config = {}
 loaded_themes = []
 
@@ -25,7 +25,6 @@ config.listen_address = environ["PASTEY_LISTEN_ADDRESS"] if "PASTEY_LISTEN_ADDRE
 config.listen_port = environ["PASTEY_LISTEN_PORT"] if "PASTEY_LISTEN_PORT" in environ else config.listen_port
 config.use_whitelist = bool(strtobool(environ["PASTEY_USE_WHITELIST"])) if "PASTEY_USE_WHITELIST" in environ else config.use_whitelist
 config.restrict_pasting = bool(strtobool(environ["PASTEY_RESTRICT_PASTING"])) if "PASTEY_RESTRICT_PASTING" in environ else config.restrict_pasting
-config.restrict_raw_pasting = bool(strtobool(environ["PASTEY_RESTRICT_RAW_PASTING"])) if "PASTEY_RESTRICT_RAW_PASTING" in environ else config.restrict_raw_pasting
 config.guess_threshold = float(environ["PASTEY_GUESS_THRESHOLD"]) if "PASTEY_GUESS_THRESHOLD" in environ else config.guess_threshold
 config.recent_pastes = int(environ["PASTEY_RECENT_PASTES"]) if "PASTEY_RECENT_PASTES" in environ else config.recent_pastes
 config.whitelist_cidr = environ["PASTEY_WHITELIST_CIDR"].split(",") if "PASTEY_WHITELIST_CIDR" in environ else config.whitelist_cidr
