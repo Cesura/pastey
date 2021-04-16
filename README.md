@@ -51,6 +51,7 @@ $ git clone https://github.com/Cesura/pastey.git && cd pastey && docker-compose 
 Note that this must be modified if you wish to use a local directory for storage, rather than a Docker volume.
 
 ### Local
+#### With language detection
 Requirements:
 * Python 3.8
 * AVX-enabled processor (or a Python environment configured to use Anaconda's Tensorflow)
@@ -60,6 +61,15 @@ $ git clone https://github.com/Cesura/pastey.git && cd pastey && mkdir ./data
 $ pip3 install -r requirements.txt
 $ python3 app.py 
 ```
+
+#### Without language detection
+If you prefer to not use the language detection feature, use the included **patch_no_tensorflow.sh** script to remove the guesslang requirements:
+```
+$ git clone https://github.com/Cesura/pastey.git && cd pastey && mkdir ./data
+$ ./patch_no_tensorflow.sh && pip3 install -r requirements.txt
+$ python3 app.py 
+```
+
 # Configuration
 Here is a list of the available configuration options:
 | Environment Variable        | config.py Variable   | Description                                                                                                                                                                                      | Default Value                                                             |
