@@ -31,7 +31,7 @@ def home():
         themes=loaded_themes,
         force_show_recent=config.force_show_recent,
         show_cli_button=config.show_cli_button,
-        script_url=request.url.rsplit('/', 1)[0] + "/pastey")
+        script_url=common.build_url(request, "/pastey"))
 
 # New paste page
 @app.route("/new")
@@ -51,7 +51,7 @@ def config_page():
 
     return render_template("config.html",
         config_items=loaded_config, 
-        script_url=request.url.rsplit('/', 1)[0] + "/pastey",
+        script_url=common.build_url(request, "/pastey"),
         whitelisted=whitelisted,
         active_theme=common.set_theme(request),
         themes=loaded_themes)
@@ -64,7 +64,7 @@ def view(unique_id):
     if content is not None:
         return render_template("view.html",
             paste=content,
-            url=request.url,
+            url=common.build_url(request, "/view/" + unique_id),
             whitelisted=common.verify_whitelist(common.get_source_ip(request)),
             active_theme=common.set_theme(request),
             themes=loaded_themes)
@@ -81,7 +81,7 @@ def view_key(unique_id, key):
     elif content is not None:
         return render_template("view.html",
             paste=content,
-            url=request.url,
+            url=common.build_url(request, "/view/" + unique_id + "/" + key),
             whitelisted=common.verify_whitelist(common.get_source_ip(request)),
             active_theme=common.set_theme(request),
             themes=loaded_themes)
@@ -101,7 +101,7 @@ def delete(unique_id):
 # Script download
 @app.route("/pastey")
 def pastey_script():
-    return render_template('pastey.sh', endpoint=request.url.rsplit('/', 1)[0] + "/raw"), 200, {
+    return render_template('pastey.sh', endpoint=common.build_url(request, "/raw")), 200, {
         'Content-Disposition': 'attachment; filename="pastey"',
         'Content-Type': 'text/plain'
     }
@@ -147,7 +147,7 @@ def raw():
 
     # Create paste
     unique_id, key = functions.new_paste("Untitled", request.data.decode('utf-8'), source_ip, single=False, encrypt=False)
-    link = request.url.rsplit('/', 1)[0] + "/view/" + unique_id
+    link = common.build_url(request, "/view/" + unique_id)
 
     return link, 200
 

@@ -10,10 +10,17 @@
     .pastey-checkbox {
         margin-bottom:20px;
     }
+    .pastey-view-button, .pastey-view-url {
+        margin-bottom:20px;
+    }
 }
 
 .tooltip {
     pointer-events: none;
+}
+
+.pastey-view-button {
+    box-sizing: content-box;
 }
 
 .prettyprint {

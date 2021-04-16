@@ -50,3 +50,14 @@ ignore_guess = ['TeX', 'SQL']
 
 # Show CLI button on home page
 show_cli_button = True
+
+# Include https in the generated links instead of http
+# This assumes you are behind something else doing the SSL
+# termination, but want the users to see https links
+force_https_links = False
+
+# This can be used to specify a different domain for generated links
+#
+# Note: exclude the http:// or https:// prefix, as well as anything 
+# following the domain (except the port, if applicable)
+override_domain = ""

@@ -20,12 +20,25 @@
     <nav class="navbar navbar-expand-lg fixed-top bg-white pastey-navbar">
       <div class="container-fluid">
 
+        <!-- Toggle button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#pasteyNavbarContainer"
+          aria-controls="pasteyNavbarContainer"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars pastey-navbar-toggler"></i>
+        </button>
+
         <!-- Navbar logo -->
         <a class="navbar-brand" href="/">
           <div class="pastey-logo" style="margin-top: -3px;"></div>
         </a>
 
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="pasteyNavbarContainer">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item active">
               <a class="nav-link pastey-link" aria-current="page" href="/">Home</a>
@@ -80,14 +93,14 @@
       <p class="mb-3">A lightweight, self-hosted paste platform</p><br />
       <div class="row justify-content-md-center">
         <div class="col-md-2">
-          <a class="btn btn-primary text-nowrap m-2" href="/new" role="button" rel="nofollow">New Paste</a>
+          <a class="btn btn-primary text-nowrap m-2" href="/new" role="button" rel="nofollow"><i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;New Paste</a>
         </div>
 
         {% if show_cli_button %}
         <div class="col-md-2">
           <a class="btn btn-success text-nowrap m-2" href="{{ script_url }}" role="button"
             data-mdb-toggle="tooltip"
-            title="Pastey provides a script that can be used to pipe output directly from the command line">Use CLI</a>
+            title="Pastey provides a script that can be used to pipe output directly from the command line"><i class="fas fa-terminal"></i>&nbsp;&nbsp;&nbsp;Use CLI</a>
         </div>
         {% endif %}
       </div>      
@@ -115,7 +128,7 @@
 
               <div class="col-md-8 mb-4">
                 {% if whitelisted %}
-                <a class="btn btn-danger m-2" href="/delete/{{ paste.unique_id }}" role="button" style="float:right;">Delete</a>
+                <a class="btn btn-danger m-2" href="/delete/{{ paste.unique_id }}" role="button" style="float:right;"><i class="fas fa-trash"></i>&nbsp;&nbsp;&nbsp;Delete</a>
                 {% endif %}
 
                 <h5>{{ paste.title }}</h5>

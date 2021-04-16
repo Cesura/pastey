@@ -21,12 +21,25 @@
     <nav class="navbar navbar-expand-lg fixed-top bg-white pastey-navbar">
       <div class="container-fluid">
 
+        <!-- Toggle button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#pasteyNavbarContainer"
+          aria-controls="pasteyNavbarContainer"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars pastey-navbar-toggler"></i>
+        </button>
+
         <!-- Navbar logo -->
         <a class="navbar-brand" href="/">
           <div class="pastey-logo" style="margin-top: -3px;"></div>
         </a>
 
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="pasteyNavbarContainer">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item active">
               <a class="nav-link pastey-link" href="/">Home</a>
@@ -88,14 +101,20 @@
       {% if paste.expiration is defined and paste.expiration != "" %}
         <span style="font-weight:bold;">Expires: </span><span>{{ paste.expiration }}</span><br />
       {% endif %}<br />
-      <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-5">
-              <input class="form-control pastey-input" id="paste-url" type="text" value="{{ url }}" readonly />
-          </div>
-          <div class="col-md-1">
-              <button type="button" class="btn btn-success text-nowrap" onclick="copyToClipboard()">Copy Link</button>
-          </div>
+      <div class="row justify-content-md-center">
+        <div class="col-md-1" style="min-width: 140px;">
+          <button type="button" class="btn btn-secondary text-nowrap pastey-view-button"
+              data-mdb-toggle="modal"
+              data-mdb-target="#qrModal">
+              <i class="fas fa-qrcode"></i>&nbsp;&nbsp;&nbsp;QR Code
+          </button>
+        </div>
+        <div class="col-md-5">
+            <input class="form-control pastey-input pastey-view-url" id="paste-url" type="text" value="{{ url }}" readonly />
+        </div>
+        <div class="col-md-1">
+          <button type="button" class="btn btn-success text-nowrap pastey-view-button" onclick="copyToClipboard()"><i class="fas fa-copy"></i>&nbsp;&nbsp;&nbsp;Copy Link</button>
+        </div>
       </div>
       {% if paste.uses == 0 %}
       <div class="row">
@@ -111,20 +130,65 @@
   <!--Main layout-->
   <main class="my-5">
       <div class="container">
-          <form action="/paste" method="POST">
-              <div class="row">
-                  <div class="col-md-12 mb-4">
-                      <pre class="prettyprint linenums">{{ paste.content }}</pre>          
-                  </div>    
-              </div>
-          </form>
+          <div class="row">
+              <div class="col-md-12 mb-4">
+                  <pre class="prettyprint linenums">{{ paste.content }}</pre>          
+              </div>    
+          </div>
+
+        <!-- QR Modal -->
+        <div
+          class="modal fade"
+          id="qrModal"
+          tabindex="-1"
+          aria-labelledby="qrModalLabel"
+          aria-hidden="true"
+        >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="qrModalLabel">QR Code</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-mdb-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div id="qrcode" style="display: flex; justify-content: center;"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
   </main>
+
   <!--Main layout-->
 
   <!--JS-->
+  <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/js/qrcode.min.js"></script>
   <script type="text/javascript" src="/static/js/mdb.min.js"></script>
   <script type="text/javascript" src="/static/js/common.js"></script>
-  <script src="/static/js/prettify.min.js"></script>
-  <script src="/static/js/run_prettify.js"></script></body>
+  <script type="text/javascript" src="/static/js/prettify.min.js"></script>
+  <script type="text/javascript" src="/static/js/run_prettify.js"></script>
+
+  <!-- Generate QR code -->
+  <script type="text/javascript">
+    var qrcode = new QRCode("qrcode", {
+      text: "{{ url }}",
+      width: 256,
+      height: 256,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
 </html>

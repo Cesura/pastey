@@ -85,3 +85,10 @@ def is_expired(paste):
             return True
     
     return False
+
+# Build a URL, accounting for config options
+def build_url(request, path="/"):
+    protocol = request.url.split('//')[0] if not config.force_https_links else "https:"
+    domain = request.url.split('//')[1].split("/")[0] if config.override_domain == "" else config.override_domain
+    
+    return protocol + "//" + domain + path

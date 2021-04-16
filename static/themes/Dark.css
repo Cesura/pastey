@@ -41,8 +41,16 @@ body, tr {
     color: rgba(255, 255, 255);
 }
 
+.pastey-navbar-toggler {
+    color: rgb(255,255,255) !important;
+}
+
 .nocode {
     color: rgb(255,255,255) !important;
+}
+
+.modal-title {
+    color: rgb(0,0,0);
 }
 
 /* Google prettify elements */

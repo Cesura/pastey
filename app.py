@@ -6,7 +6,7 @@ from os import environ
 from distutils.util import strtobool
 from threading import Thread
 
-pastey_version = "0.3.1"
+pastey_version = "0.4"
 loaded_config = {}
 loaded_themes = []
 
@@ -36,6 +36,8 @@ config.purge_interval = int(environ["PASTEY_PURGE_INTERVAL"]) if "PASTEY_PURGE_I
 config.force_show_recent = bool(strtobool(environ["PASTEY_FORCE_SHOW_RECENT"])) if "PASTEY_FORCE_SHOW_RECENT" in environ else config.force_show_recent
 config.ignore_guess = environ["PASTEY_IGNORE_GUESS"].split(",") if "PASTEY_IGNORE_GUESS" in environ else config.ignore_guess
 config.show_cli_button = bool(strtobool(environ["PASTEY_SHOW_CLI_BUTTON"])) if "PASTEY_SHOW_CLI_BUTTON" in environ else config.show_cli_button
+config.force_https_links = bool(strtobool(environ["PASTEY_FORCE_HTTPS_LINKS"])) if "PASTEY_FORCE_HTTPS_LINKS" in environ else config.force_https_links
+config.override_domain = environ["PASTEY_OVERRIDE_DOMAIN"] if "PASTEY_OVERRIDE_DOMAIN" in environ else config.override_domain
 
 # Main loop
 if __name__ == "__main__":
