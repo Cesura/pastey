@@ -19,11 +19,11 @@ A lightweight, self-hosted paste platform
 
 ## Screenshots
 ### Browser
-![screenshot1](https://i.imgur.com/uMUdXnW.png)
-![screenshot2](https://i.imgur.com/sNxHUCc.png)
-![screenshot3](https://i.imgur.com/8dEy9qT.png)
+![home](https://i.imgur.com/P3BSv9d.png)
+![new](https://i.imgur.com/5YiQ3GB.png)
+![view](https://i.imgur.com/4bkPKNP.png)
 ### Dark
-![screenshot4](https://i.imgur.com/U6QRU9S.png)
+![dark](https://i.imgur.com/SXeSa5d.png)
 ### CLI
 ![screenshot5](https://i.imgur.com/FFWGe43.png)
 
