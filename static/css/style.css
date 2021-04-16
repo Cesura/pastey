@@ -45,3 +45,7 @@
 .pastey-checkbox {
     padding-top:10px;
 }
+
+.pastey-title {
+    word-wrap:break-word;
+}

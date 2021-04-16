@@ -35,6 +35,7 @@ def get_recent(limit=config.recent_pastes):
                 # Replace preview if encrypted
                 if paste['encrypted']:
                     paste['content'] = "[Encrypted]"
+                    paste['title'] = "[Encrypted]"
 
                 recent_pastes.append(paste)
         i += 1
@@ -67,14 +68,6 @@ def get_paste(unique_id, key=""):
                 with open(file_path, "w") as fp:
                     fp.write(json.dumps(paste))
 
-        # Decrypt content, if necessary
-        try:
-            if key != "":
-                cipher_suite = Fernet(key.encode('utf-8'))
-                paste['content'] = cipher_suite.decrypt(paste['content'].encode('utf-8')).decode('utf-8')
-        except Exception as e:
-            return 401
-
         return paste
     else:
         return None
@@ -104,7 +97,10 @@ def new_paste(title, content, source_ip, expires=0, single=False, encrypt=False)
     if encrypt:
         init_key = Fernet.generate_key()
         cipher_suite = Fernet(init_key)
+
+        # Encrypt title and content
         content = cipher_suite.encrypt(content.encode('utf-8')).decode('utf-8')
+        title = cipher_suite.encrypt(title.encode('utf-8')).decode('utf-8')
         key = init_key.decode('utf-8')
 
     # Check if single use is set

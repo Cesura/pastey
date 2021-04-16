@@ -72,24 +72,6 @@ def view(unique_id):
     else:
         abort(404)
 
-# View paste page (encrypted)
-@app.route("/view/<unique_id>/<key>")
-def view_key(unique_id, key):
-    content = functions.get_paste(unique_id, key=key)
-
-    if content == 401:
-        abort(401)
-    elif content is not None:
-        return render_template("view.html",
-            paste=content,
-            url=common.build_url(request, "/view/" + unique_id + "/" + key),
-            whitelisted=common.verify_whitelist(common.get_source_ip(request)),
-            active_theme=common.set_theme(request),
-            themes=loaded_themes)
-    else:
-        abort(404)
-
-
 # Delete paste
 @app.route("/delete/<unique_id>")
 def delete(unique_id):
@@ -143,9 +125,9 @@ def paste():
 
             # Return link if cli form option was set
             if 'cli' in request.form:
-                return common.build_url(request, "/view/" + unique_id + "/" + quote(key)), 200
+                return common.build_url(request, "/view/" + unique_id + "#" + quote(key)), 200
             else:
-                return redirect("/view/" + unique_id + "/" + quote(key))
+                return redirect("/view/" + unique_id + "#" + quote(key))
         else:
             if 'cli' in request.form:
                 return common.build_url(request, "/view/" + unique_id), 200
@@ -199,7 +181,7 @@ def paste_json():
     unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt)
     if encrypt:
         return {
-            "link": common.build_url(request, "/view/" + unique_id + "/" + quote(key))
+            "link": common.build_url(request, "/view/" + unique_id + "#" + quote(key))
         }, 200
     else:
         return {

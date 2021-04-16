@@ -95,7 +95,9 @@
       {% else %}
         <img src="/static/img/unencrypted.png" width="30px" height="30px" /><br /><br />
       {% endif %}
-      <h1 class="mb-3 h2">{{ paste.title }}</h1>
+      <div class="pastey-title">
+        <h1 class="mb-3 h2" id="pastey-title">{{ paste.title }}</h1>
+      </div>
       <span style="font-weight:bold;">Format: </span><span>{{ paste.language }}</span><br />
       <span style="font-weight:bold;">Date: </span><span>{{ paste.timestamp }}</span><br />
       {% if paste.expiration is defined and paste.expiration != "" %}
@@ -123,6 +125,13 @@
         </div>
       </div>
       {% endif %}
+
+      <div id="pastey-decrypt-failed" style="display:none;"><br />
+        <span class="badge rounded-pill bg-danger">Error: could not decrypt paste with the given key</span>
+      </div>
+      <div id="pastey-decrypt-success" style="display:none;"><br />
+        <span class="badge rounded-pill bg-success">&nbsp;<i class="fas fa-lock-open"></i>&nbsp;&nbsp;&nbsp;Paste has been decrypted successfully&nbsp;</span>
+      </div>
     </div>
     <!-- Jumbotron -->
   </header>
@@ -132,7 +141,7 @@
       <div class="container">
           <div class="row">
               <div class="col-md-12 mb-4">
-                  <pre class="prettyprint linenums">{{ paste.content }}</pre>          
+                  <pre class="prettyprint linenums" id="pastey-content">{{ paste.content }}</pre>          
               </div>    
           </div>
 
@@ -173,21 +182,28 @@
 
   <!--JS-->
   <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/js/fernet.js"></script>
+  <script type="text/javascript" src="/static/js/common.js"></script>
   <script type="text/javascript" src="/static/js/qrcode.min.js"></script>
   <script type="text/javascript" src="/static/js/mdb.min.js"></script>
-  <script type="text/javascript" src="/static/js/common.js"></script>
   <script type="text/javascript" src="/static/js/prettify.min.js"></script>
   <script type="text/javascript" src="/static/js/run_prettify.js"></script>
-
-  <!-- Generate QR code -->
+  
+  <!-- Decrypt paste and generate QR code -->
   <script type="text/javascript">
-    var qrcode = new QRCode("qrcode", {
-      text: "{{ url }}",
-      width: 256,
-      height: 256,
-      colorDark : "#000000",
-      colorLight : "#ffffff",
-      correctLevel : QRCode.CorrectLevel.H
+    $(document).ready(function() {
+        if (window.location.hash.length > 0) {
+            decryptPaste();
+        }
+
+        var qrcode = new QRCode("qrcode", {
+          text: $("#paste-url").val(),
+          width: 256,
+          height: 256,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
+        });
     });
   </script>
 </body>
