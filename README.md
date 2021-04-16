@@ -12,6 +12,7 @@ A lightweight, self-hosted paste platform
 * Theme system
 * IP/network whitelisting and blocking
 * Endpoint rate limiting
+* JSON API
 * Fully configurable via environment variables
 * Included script for uploading files/content from stdin
 
