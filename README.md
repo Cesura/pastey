@@ -46,7 +46,7 @@ $ docker run -d -p 5000:5000 -v /path/to/local/dir:/app/data cesura/pastey:lates
 ### docker-compose
 If you prefer to use docker-compose:
 ```
-$ git clone https://github.com/Cesura/pastey.git && cd pastey && docker-compose up -d
+$ wget https://raw.githubusercontent.com/Cesura/pastey/main/docker-compose.yml && docker-compose up -d
 ```
 Note that this must be modified if you wish to use a local directory for storage, rather than a Docker volume.
 
