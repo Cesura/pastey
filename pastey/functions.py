@@ -79,7 +79,7 @@ def delete_paste(unique_id):
         remove(paste)
 
 # Create new paste
-def new_paste(title, content, source_ip, expires=0, single=False, encrypt=False):
+def new_paste(title, content, source_ip, expires=0, single=False, encrypt=False, language="AUTO"):
     unique_id = str(uuid.uuid4())
     output_file = config.data_directory + "/" + unique_id
 
@@ -89,8 +89,9 @@ def new_paste(title, content, source_ip, expires=0, single=False, encrypt=False)
         output_file = config.data_directory + "/" + unique_id
 
     # Attempt to guess programming language
-    guesses = guess.probabilities(content)
-    language = guesses[0][0] if guesses[0][1] > config.guess_threshold and guesses[0][0] not in config.ignore_guess else "Plaintext"
+    if language == "AUTO":
+        guesses = guess.probabilities(content)
+        language = guesses[0][0] if guesses[0][1] > config.guess_threshold and guesses[0][0] not in config.ignore_guess else "Plaintext"
 
     # Check if encryption is necessary
     key = ""
