@@ -1,5 +1,5 @@
 from . import config
-
+from __main__ import guess
 import ipaddress
 from os import path
 from pathlib import Path
@@ -61,6 +61,10 @@ def get_themes():
     for path in Path("./static/themes/").iterdir():
         themes.append(str(path).split('/')[-1].split('.')[0])
     return sorted(themes, key=str.casefold)
+
+# Get a list of all supported languages from guesslang
+def get_languages():
+    return guess.supported_languages
 
 # Get file path from unique id
 # This is a wrapper to check for files with the .expires extension

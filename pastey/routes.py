@@ -10,6 +10,9 @@ import json
 # Load themes
 loaded_themes = common.get_themes()
 
+# Load Languages
+supported_languages = common.get_languages()
+
 # Set rate limit
 # Workaround for @limiter annotations being parsed early
 config.rate_limit = environ["PASTEY_RATE_LIMIT"] if "PASTEY_RATE_LIMIT" in environ else config.rate_limit
@@ -40,6 +43,7 @@ def new():
     whitelisted = common.verify_whitelist(common.get_source_ip(request))
     return render_template("new.html",
         whitelisted=whitelisted,
+        languages=supported_languages,
         active_theme=common.set_theme(request),
         themes=loaded_themes)
 
@@ -118,9 +122,10 @@ def paste():
         single = True if 'single' in request.form else False
         encrypt = True if 'encrypt' in request.form else False
         expiration = int(request.form['expiration']) if 'expiration' in request.form else -1
+        language = request.form['language'] if 'language' in request.form else "AUTO"
 
         # Create paste
-        unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt)
+        unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt, language=language)
         if encrypt:
 
             # Return link if cli form option was set
@@ -176,9 +181,10 @@ def paste_json():
     single = paste['single'] if ('single' in paste and type(paste['single']) == bool) else False
     encrypt = paste['encrypt'] if ('encrypt' in paste and type(paste['encrypt']) == bool) else False
     expiration = paste['expiration'] if ('expiration' in paste and type(paste['expiration']) == int) else -1
+    language = paste['language'] if ('language' in paste and type(paste['language']) == str) else "AUTO"
 
     # Create paste
-    unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt)
+    unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt, language=language)
     if encrypt:
         return {
             "link": common.build_url(request, "/view/" + unique_id + "#" + quote(key))
