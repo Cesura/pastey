@@ -34,6 +34,8 @@ def get_icon(language):
         return "cplusplus"
     elif language == "Jupyter Notebook":
         return "jupyter"
+    elif language == "Visual Basic":
+        return "vb"
     else:
         return language.lower()
 
