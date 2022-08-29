@@ -88,7 +88,7 @@ def delete(unique_id):
 # Script download
 @app.route("/pastey")
 def pastey_script():
-    return render_template('pastey.sh', endpoint=common.build_url(request, "/raw")), 200, {
+    return render_template('pastey.sh', endpoint=common.build_url(request, "/paste")), 200, {
         'Content-Disposition': 'attachment; filename="pastey"',
         'Content-Type': 'text/plain'
     }

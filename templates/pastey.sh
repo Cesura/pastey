@@ -7,7 +7,7 @@
 # script framework based on https://betterdev.blog/minimal-safe-bash-script-template/
 # initially adapted and written by Serge van Ginderachter <serge@vanginderachter.be>
 
-set -Eeuo pipefail
+set -Eeo pipefail
 #execute=(echo popo)trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
