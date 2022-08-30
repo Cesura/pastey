@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.2.0
+FROM tensorflow/tensorflow:2.5.0
 WORKDIR /app
 COPY requirements.txt /app
 RUN mkdir -p /app/data && pip install -r /app/requirements.txt
