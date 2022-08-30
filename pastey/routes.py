@@ -1,4 +1,7 @@
-from __main__ import app, limiter, loaded_config
+if __name__ == '__main__':
+    from __main__ import app, limiter, loaded_config
+else:
+    from app import app, limiter, loaded_config
 from . import config, common, functions
 
 from flask import Flask, render_template, request, redirect, abort, make_response

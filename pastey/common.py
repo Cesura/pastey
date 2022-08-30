@@ -1,5 +1,8 @@
 from . import config
-from __main__ import guess
+if __name__ == '__main__':
+    from __main__ import guess
+else:
+    from app import guess
 import ipaddress
 from os import path
 from pathlib import Path

@@ -1,4 +1,7 @@
-from __main__ import guess, app
+if __name__ == '__main__':
+    from __main__ import guess, app
+else:
+    from app import guess, app
 from . import config, common
 
 from os import path, remove
