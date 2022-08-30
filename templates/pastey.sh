@@ -7,7 +7,7 @@
 # script framework based on https://betterdev.blog/minimal-safe-bash-script-template/
 # initially adapted and written by Serge van Ginderachter <serge@vanginderachter.be>
 
-set -Eeuo pipefail
+set -Eeo pipefail
 #execute=(echo popo)trap cleanup SIGINT SIGTERM ERR EXIT
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
@@ -74,8 +74,8 @@ parse_params() {
 	content=
 	title=
 	file=
-	single=
-	encrypt=
+	single="false"
+	encrypt="false"
 
 	while (( "$#" ))
     do
@@ -114,12 +114,12 @@ parse_params() {
 
             -s | --single)
                 shift || :
-                single="-F single="
+                single="true"
                 ;;
 
             -e | --encrypt)
                 shift || :
-                encrypt="-F encrypt="
+                encrypt="true"
                 ;;
 
             --)
@@ -170,7 +170,7 @@ parse_options(){
 				content="$(</dev/stdin)"
 			elif [ -r ${file} ]
 			then
-				content="$(<${file})"
+				content="$(cat ${file} | tr -d '\0')"
 			else
 				die "Could not read from ${file}"
 			fi
@@ -206,15 +206,21 @@ parse_options(){
 # just do it now
 paste_it() {
 
-	curl \
-		-X POST \
-		-F "cli=" \
-		-F "title=${title}" \
-		-F "content=${content}" \
-		-F "expiration=${expiration}" \
-		${encrypt} ${single} \
-		${PASTEY_ENDPOINT}
+	content=$(echo -n "${content}" | base64)
+	payload="{
+            \"content\": \"${content}\",
+            \"title\": \"${title}\",
+            \"expiration\": \"${expiration}\",
+            \"encrypt\": ${encrypt},
+            \"single\": ${single},
+            \"base64\": true
+          }"
 
+	echo -n $payload | curl \
+                      -X POST \
+                      -H "Content-Type: application/json" \
+                      --data-binary @- \
+                      ${PASTEY_ENDPOINT}; echo
 }
 
 ## main execution

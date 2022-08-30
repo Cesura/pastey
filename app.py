@@ -6,7 +6,7 @@ from os import environ
 from distutils.util import strtobool
 from threading import Thread
 
-pastey_version = "0.4.2"
+pastey_version = "0.5"
 loaded_config = {}
 loaded_themes = []
 

@@ -121,11 +121,55 @@
             <div class="col-md-12">
               <h1 class="mb-3 h4">Download Script</h1>
               <p>Pastey provides a script that can be used to paste output directly from the command line:</p>
-              <pre>$ cat /var/log/nginx.log | pastey</pre>
-              <pre>$ echo "Hello, Pastey!" | pastey</pre>
+              <pre>$ pastey -f /var/log/nginx.log</pre>
+              <pre>$ echo "Hello, Pastey!" | pastey -c -</pre>
               <p style="font-weight:bold;">Download the following, make it executable, and put it in your system PATH to be used anywhere!</p>
+            
+
+              <!-- Help button -->
+              <br />
+              <a
+                class="btn btn-primary"
+                data-mdb-toggle="collapse"
+                href="#script-help"
+                role="button"
+                aria-expanded="false"
+                aria-controls="script-help"
+              >
+                <i class="fas fa-info"></i>&nbsp;&nbsp;&nbsp;Show script usage
+              </a>
+
+
+      <div class="collapse mt-3" style="text-align: left !important; margin-left:25%;" id="script-help">
+<br /><pre>Usage: pastey [-h] [-v] [-f] -p param_value arg1 [arg2...]
+
+Script description here.
+
+Available options:
+
+-h, --help      Print this help and exit
+-v, --verbose   Print script debug info
+-c, --content   Pass the content of the paste in a simple argument
+-e, --encrypt   Encrypt the paste content
+-f, --file		Read the content from this file. If file is "-", read from stdin
+-s, --single    Create a paste that expires after the first view
+-t, --title     Set the title of the paste
+-x, --expiration
+Set the time in hours after which the paste expires
+
+--              Stop further option parsing
+Arguments passed after the -- option are evaluated
+as a command, and that command's output is pasted.
+The full command is used a the title.
+
+If zero arguments are passed,
+or none of --content, --file or -- are passed,
+content is read from stdin.</pre>
+      </div>
+
+              
             </div>
-          </div><br />
+          </div><br /><br />
 
           <div class="row justify-content-md-center">
             <div class="col-md-4">
@@ -136,7 +180,7 @@
                   <button type="button" class="btn btn-success text-nowrap"><i class="fas fa-download"></i>&nbsp;&nbsp;&nbsp;Download</button>
                 </a>
             </div>
-          </div><br />
+          </div><br /><br />
   
           <div class="row text-center">
             <div class="col-md-12">

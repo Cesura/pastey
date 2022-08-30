@@ -1,11 +1,12 @@
 from __main__ import app, limiter, loaded_config
 from . import config, common, functions
 
-from flask import Flask, render_template, request, redirect, abort
+from flask import Flask, render_template, request, redirect, abort, make_response
 from urllib.parse import quote
 from datetime import datetime
 from os import environ
 import json
+from base64 import b64decode
 
 # Load themes
 loaded_themes = common.get_themes()
@@ -64,15 +65,27 @@ def config_page():
 # View paste page
 @app.route("/view/<unique_id>")
 def view(unique_id):
-    content = functions.get_paste(unique_id)
+    paste = functions.get_paste(unique_id)
 
-    if content is not None:
+    if paste is not None:
         return render_template("view.html",
-            paste=content,
+            paste=paste,
             url=common.build_url(request, "/view/" + unique_id),
             whitelisted=common.verify_whitelist(common.get_source_ip(request)),
             active_theme=common.set_theme(request),
             themes=loaded_themes)
+    else:
+        abort(404)
+        
+# View paste page (raw)
+@app.route("/view/<unique_id>/raw")
+def view_raw(unique_id):
+    paste = functions.get_paste(unique_id)
+
+    if paste is not None:
+        response = make_response(paste['content'], 200)
+        response.mimetype = "text/plain"
+        return response
     else:
         abort(404)
 
@@ -88,7 +101,7 @@ def delete(unique_id):
 # Script download
 @app.route("/pastey")
 def pastey_script():
-    return render_template('pastey.sh', endpoint=common.build_url(request, "/raw")), 200, {
+    return render_template('pastey.sh', endpoint=common.build_url(request, "/paste")), 200, {
         'Content-Disposition': 'attachment; filename="pastey"',
         'Content-Type': 'text/plain'
     }
@@ -176,6 +189,12 @@ def paste_json():
         abort(400)
     content = paste['content']
 
+    # Check if content was base64 encoded (from the CLI client typically)
+    from_client = False
+    if 'base64' in paste and paste['base64'] == True:
+      from_client = True
+      content = b64decode(content).decode("utf-8")
+
     # Optional fields
     title = paste['title'] if ('title' in paste and paste['title'].strip() != "") else "Untitled"
     single = paste['single'] if ('single' in paste and type(paste['single']) == bool) else False
@@ -186,13 +205,19 @@ def paste_json():
     # Create paste
     unique_id, key = functions.new_paste(title, content, source_ip, expires=expiration, single=single, encrypt=encrypt, language=language)
     if encrypt:
-        return {
-            "link": common.build_url(request, "/view/" + unique_id + "#" + quote(key))
-        }, 200
+        if from_client:
+          return common.build_url(request, "/view/" + unique_id + "#" + quote(key)), 200
+        else:
+          return {
+              "link": common.build_url(request, "/view/" + unique_id + "#" + quote(key))
+          }, 200
     else:
-        return {
-            "link": common.build_url(request, "/view/" + unique_id)
-        }, 200
+        if from_client:
+          return common.build_url(request, "/view/" + unique_id), 200
+        else:
+          return {
+              "link": common.build_url(request, "/view/" + unique_id)
+          }, 200
 
 # Custom 404 handler
 @app.errorhandler(404)

@@ -98,7 +98,12 @@
       <div class="pastey-title">
         <h1 class="mb-3 h2" id="pastey-title">{{ paste.title }}</h1>
       </div>
-      <span style="font-weight:bold;">Format: </span><span>{{ paste.language }}</span><br />
+      
+      <span style="font-weight:bold;">Format: </span>{{ paste.language }}</span>
+      {% if not paste.encrypted %}
+        <span>&nbsp;(<a href='{{ url }}/raw' target='_blank'><i class="fas fa-eye"></i>&nbsp;View Raw</a>)</span>
+      {% endif %}<br />
+
       <span style="font-weight:bold;">Date: </span><span>{{ paste.timestamp }}</span><br />
       {% if paste.expiration is defined and paste.expiration != "" %}
         <span style="font-weight:bold;">Expires: </span><span>{{ paste.expiration }}</span><br />
@@ -139,15 +144,15 @@
   <!--Main layout-->
   <main class="my-5">
       <div class="container">
-          <div class="row">
-              <div class="col-md-12 mb-4">
-                  {% if paste.language == "Plaintext" %}
-                  <pre class="prettyprint nocode" id="pastey-content">{{ paste.content }}</pre>
-                  {% else %}
-                  <pre class="prettyprint linenums" id="pastey-content">{{ paste.content }}</pre>
-                  {% endif %}
-              </div>    
-          </div>
+        <div class="row">
+          <div class="col-md-12 mb-4">
+            {% if paste.language == "Plaintext" %}
+              <pre class="prettyprint nocode" id="pastey-content">{{ paste.content }}</pre>
+            {% else %}
+              <pre class="prettyprint linenums" id="pastey-content">{{ paste.content }}</pre>
+            {% endif %}
+          </div>    
+        </div>
 
         <!-- QR Modal -->
         <div
