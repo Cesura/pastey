@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.2.0
+FROM tensorflow/tensorflow:2.5.0
 COPY . /app/
 RUN pip install -r /app/requirements.txt
 EXPOSE 5000
