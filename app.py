@@ -38,43 +38,22 @@ config.show_cli_button = bool(strtobool(environ["PASTEY_SHOW_CLI_BUTTON"])) if "
 config.force_https_links = bool(strtobool(environ["PASTEY_FORCE_HTTPS_LINKS"])) if "PASTEY_FORCE_HTTPS_LINKS" in environ else config.force_https_links
 config.override_domain = environ["PASTEY_OVERRIDE_DOMAIN"] if "PASTEY_OVERRIDE_DOMAIN" in environ else config.override_domain
 
+loaded_config['pastey_version'] = pastey_version
+app.logger.info("Pastey version %s", pastey_version)
+app.logger.info("USING THE FOLLOWING CONFIGURATION:")
+for option in dir(config):
+    if not option.startswith("__"):
+        loaded_config[option] = eval("config.%s" % option)
+        app.logger.info("%s: %s", option, loaded_config[option])
+
+# Register error handlers
+app.register_error_handler(404, routes.page_not_found)
+app.register_error_handler(401, routes.unauthorized)
+
+# Start purging expired pastes thread
+purge_thread = Thread(target=functions.purge_expired_pastes, daemon=True)
+purge_thread.start()
 
 # Main loop
 if __name__ == "__main__":
-    
-    # Print configuration
-    print("=====================================")
-    loaded_config['pastey_version'] = pastey_version
-    print("Pastey version ", pastey_version)
-    print("USING THE FOLLOWING CONFIGURATION:")
-    print("=====================================")
-    for option in dir(config):
-        if not option.startswith("__"):
-            loaded_config[option] = eval("config.%s" % option)
-            print(option, ": ", loaded_config[option])
-    print("=====================================")
-
-    # Register error handlers
-    app.register_error_handler(404, routes.page_not_found)
-    app.register_error_handler(401, routes.unauthorized)
-
-    # Start purging expired pastes thread
-    purge_thread = Thread(target=functions.purge_expired_pastes, daemon=True)
-    purge_thread.start()
-
     app.run(host=config.listen_address, port=config.listen_port)
-else:
-    # Register error handlers
-    app.register_error_handler(404, routes.page_not_found)
-    app.register_error_handler(401, routes.unauthorized)
-
-    # Start purging expired pastes thread
-    purge_thread = Thread(target=functions.purge_expired_pastes, daemon=True)
-    purge_thread.start()
-
-    loaded_config['pastey_version'] = pastey_version
-    for option in dir(config):
-        if not option.startswith("__"):
-            loaded_config[option] = eval("config.%s" % option)
-            print(option, ": ", loaded_config[option])
-
