@@ -8,10 +8,9 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
     <link rel="stylesheet" href="/static/css/mdb.min.css" />
-    <link rel="stylesheet" href="/static/css/prettify.min.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
     <link rel="stylesheet" href="/static/themes/{{ active_theme }}.css" />
-
+    <link rel="stylesheet" href="/static/css/highlight-{{ active_theme }}.css" />
     <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
 </head>
 <body>
@@ -98,12 +97,7 @@
       <div class="pastey-title">
         <h1 class="mb-3 h2" id="pastey-title">{{ paste.title }}</h1>
       </div>
-      
-      <span style="font-weight:bold;">Format: </span>{{ paste.language }}</span>
-      {% if not paste.encrypted %}
-        <span>&nbsp;(<a href='{{ url }}/raw' target='_blank'><i class="fas fa-eye"></i>&nbsp;View Raw</a>)</span>
-      {% endif %}<br />
-
+      <span style="font-weight:bold;">Format: </span><span>{{ paste.language }}</span><br />
       <span style="font-weight:bold;">Date: </span><span>{{ paste.timestamp }}</span><br />
       {% if paste.expiration is defined and paste.expiration != "" %}
         <span style="font-weight:bold;">Expires: </span><span>{{ paste.expiration }}</span><br />
@@ -144,15 +138,15 @@
   <!--Main layout-->
   <main class="my-5">
       <div class="container">
-        <div class="row">
-          <div class="col-md-12 mb-4">
-            {% if paste.language == "Plaintext" %}
-              <pre class="prettyprint nocode" id="pastey-content">{{ paste.content }}</pre>
-            {% else %}
-              <pre class="prettyprint linenums" id="pastey-content">{{ paste.content }}</pre>
-            {% endif %}
-          </div>    
-        </div>
+          <div class="row">
+              <div class="col-md-12 mb-4">
+                  {% if paste.language == "Plaintext" %}
+                  <pre><code class="plaintext" id="pastey-content">{{ paste.content }}</code></pre>
+                  {% else %}
+                  <pre><code id="pastey-content">{{ paste.content }}</code></pre>
+                  {% endif %}
+              </div>    
+          </div>
 
         <!-- QR Modal -->
         <div
@@ -195,9 +189,9 @@
   <script type="text/javascript" src="/static/js/common.js"></script>
   <script type="text/javascript" src="/static/js/qrcode.min.js"></script>
   <script type="text/javascript" src="/static/js/mdb.min.js"></script>
-  <script type="text/javascript" src="/static/js/prettify.min.js"></script>
-  <script type="text/javascript" src="/static/js/run_prettify.js"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+
   <!-- Decrypt paste and generate QR code -->
   <script type="text/javascript">
     $(document).ready(function() {
@@ -215,5 +209,10 @@
         });
     });
   </script>
+  <script type="text/javascript">
+    hljs.highlightAll(); 
+    hljs.initLineNumbersOnLoad();
+  </script>
+  
 </body>
 </html>

@@ -49,3 +49,8 @@
 .pastey-title {
     word-wrap:break-word;
 }
+
+.hljs-ln td {
+    padding-left: 1em !important;
+}
+
