@@ -1,10 +1,26 @@
 services:
   pastey:
     image: cesura/pastey:latest
+    environment:
+      PASTEY_WORKERS: 2
+      PASTEY_THREADS: 4
+      PASTEY_LISTEN_PORT: 7778
+      PASTEY_DEFAULT_THEME: Dark
+      PASTEY_BEHIND_PROXY: "true"
+      PASTEY_FORCE_SHOW_RECENT: "true"
+      PASTEY_RESTRICT_PASTING: "true"
+      PASTEY_WHITELIST_CIDR: "127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      PASTEY_RECENT_PASTES: 20
     volumes:
      - "pastey-data:/app/data"
     ports:
       - "5000:5000"
+    restart: unless-stopped
+    networks:
+      - pastey-network
 
 volumes:
   pastey-data:
+
+networks:
+  pastey-network: {}
