@@ -97,7 +97,11 @@
       <div class="pastey-title">
         <h1 class="mb-3 h2" id="pastey-title">{{ paste.title }}</h1>
       </div>
-      <span style="font-weight:bold;">Format: </span><span>{{ paste.language }}</span><br />
+      <span style="font-weight:bold;">Format: </span><span>{{ paste.language }}</span><br />      
+      {% if not paste.encrypted %}
+        <span>&nbsp;(<a href='{{ url }}/raw' target='_blank'><i class="fas fa-eye"></i>&nbsp;View Raw</a>)</span>
+      {% endif %}<br />
+
       <span style="font-weight:bold;">Date: </span><span>{{ paste.timestamp }}</span><br />
       {% if paste.expiration is defined and paste.expiration != "" %}
         <span style="font-weight:bold;">Expires: </span><span>{{ paste.expiration }}</span><br />
