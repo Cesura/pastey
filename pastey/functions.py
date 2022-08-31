@@ -8,8 +8,11 @@ from cryptography.fernet import Fernet
 import time
 import uuid
 import json
+from os import environ
 
 ########## Paste functions ##########
+
+config.recent_pastes = int(environ["PASTEY_RECENT_PASTES"]) if "PASTEY_RECENT_PASTES" in environ else config.recent_pastes
 
 # Get recent n pastes, defined in config by recent_pastes
 def get_recent(limit=config.recent_pastes):
