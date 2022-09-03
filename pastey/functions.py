@@ -85,7 +85,7 @@ def delete_paste(unique_id):
 # Create new paste
 def new_paste(title, content, source_ip, expires=0, single=False, encrypt=False, language="AUTO"):
     # this calculates the number of digits of a base64 number needed to be unlikely to have collisions
-    id_len = int(math.ceil( 2*math.log(len(listdir(config.data_directory)))/math.log(256) ))+2
+    id_len = int(math.ceil( 2*math.log(len(listdir(config.data_directory))+1)/math.log(256) ))+2
     unique_id = secrets.token_urlsafe(id_len)
     output_file = config.data_directory + "/" + unique_id
 
