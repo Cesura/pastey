@@ -53,7 +53,7 @@ while :; do
 			exit
 			;;
 		-e|--encrypt)
-			encrypt='encrypt='
+			encrypt='-F encrypt='
 			;;
 		-f|--file)
 			if [ "$2" ]; then
@@ -74,7 +74,7 @@ while :; do
 			die 'ERROR: "--file requires a non-empty option argument.'
 			;;
 		-s|--single)
-			single='single='
+			single='-F single='
 			expiration=
 			;;
 		-t|--title)
@@ -170,8 +170,8 @@ curl \
 	-F "title=$title" \
 	-F "content=</dev/fd/$content_fd" \
 	-F "expiration=$expiration" \
-	-F "${encrypt}" \
-	-F "${single}" \
+	${encrypt} \
+	${single} \
 	"${PASTEY_ENDPOINT}"
 echo
 
