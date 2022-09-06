@@ -1,234 +1,178 @@
 #!/usr/bin/env bash
 
-# c-basic-offset: 4; tab-width: 4; indent-tabs-mode: t
-# vi: set shiftwidth=4 tabstop=4 noexpandtab:
-# :indentSize=4:tabSize=4:noTabs=false:
+PASTEY_ENDPOINT={{ endpoint }}
 
-# script framework based on https://betterdev.blog/minimal-safe-bash-script-template/
-# initially adapted and written by Serge van Ginderachter <serge@vanginderachter.be>
+show_help() {
+	cat <<-EOF
+	Usage: ${0##*/} [-h] [-e] [-f INFILE] [-s] [-t title] [-x time_hrs] [-- command]
 
-set -Eeo pipefail
-#execute=(echo popo)trap cleanup SIGINT SIGTERM ERR EXIT
-
-script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
-
-# your custom endpoint
-PASTEY_ENDPOINT="{{ endpoint }}"
-
-#
-## functions
-
-usage() {
-  cat <<-EOF
-	Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
-
-	Script description here.
+	CLI interface to pastey.
 
 	Available options:
 
 	-h, --help      Print this help and exit
-	-v, --verbose   Print script debug info
-	-c, --content   Pass the content of the paste in a simple argument
 	-e, --encrypt   Encrypt the paste content
-	-f, --file		Read the content from this file. If file is "-", read from stdin
+	-f, --file		Read the content from this file.
 	-s, --single    Create a paste that expires after the first view
 	-t, --title     Set the title of the paste
 	-x, --expiration
-					Set the time in hours after which the paste expires
-
+	                Set the time in hours after which the paste expires
+	                (Default is expiration is disabled)
+                    
 	--              Stop further option parsing
-					Arguments passed after the -- option are evaluated
-					as a command, and that command's output is pasted.
-					The full command is used a the title.
+	                Arguments passed after the -- option are evaluated
+	                as a command, and that command's output is pasted.
+	                The full command is used a the title.
 
 	If zero arguments are passed,
-	or none of --content, --file or -- are passed,
+	or none of --file or -- are passed,
 	content is read from stdin.
 
 	EOF
-  exit
-}
-
-cleanup() {
-  trap - SIGINT SIGTERM ERR EXIT
-  msg "Some unhandled error happened.\n"
-  usage
-}
-
-msg() {
-  echo >&2 -e "${1-}"
 }
 
 die() {
-  local msg=$1
-  local code=${2-1} # default exit status 1
-  msg "$msg\n"
-  exit "$code"
+	printf '%s\n' "$1" >&2
+	exit 1
 }
 
-parse_params() {
-	# check required params and arguments
 
+# check required params and arguments
 
-	expiration=
-	content=
-	title=
-	file=
-	single="false"
-	encrypt="false"
+file=
+expiration=
+title=
+single=
+encrypt=
+execute=
 
-	while (( "$#" ))
-    do
-        case "${1-}" in
-
-            -h | --help)
-                usage
-                ;;
-
-            -v | --verbose)
-                set -x
-                ;;
-
-            -t | --title)
-                shift || :
-                title="${1}"
-                shift || :
-                ;;
-
-            -c | --content)
-                shift || :
-                content="${1}"
-                shift || :
-                ;;
-
-            -f | --file)
-                shift || :
-				file="${1}"
-                shift || :
-                ;;
-            -x | --expiration)
-                shift || :
-                expiration="${1}"
-                shift || :
-                ;;
-
-            -s | --single)
-                shift || :
-                single="true"
-                ;;
-
-            -e | --encrypt)
-                shift || :
-                encrypt="true"
-                ;;
-
-            --)
-                shift || :
-				execute=($*)
-				shift $#
-				;;
-
-            -?*)
-                die "Unknown option: $1"
-                shift || :
-                ;;
-
-            *)
-                if [[ -n "${1:-}" ]]
-                then
-                    die "Unknown parameter: $1"
-                fi
-                ;;
-
-        esac
-    done
-
-}
-
-parse_options(){
-
-	# warn if both single and expiration are set
-    if [[ -n "${expiration}" ]] && [[ -n "${single}" ]]
-    then
-        die "option -x|--expiration and -s|--single are mutually exclusive"
-    fi
-
-	# warn if more than 1 source
-    if [[ -n "${content}"    && -n "${file}" ]] ||
-       [[ -n "${content}"    && -n "${execute[*]}" ]] ||
-       [[ -n "${execute[*]}" && -n "${file}" ]]
-    then
-        die "option -c|--content, -f|--file and -- <command> are mutually exclusive"
-    fi
-
-	if [[ -z "${content}" ]]
-	then
-		if [[ -n "${file}" ]]
-		then
-			if [[ ${file} = "-" ]]
-			then
-				content="$(</dev/stdin)"
-			elif [ -r ${file} ]
-			then
-				content="$(cat ${file} | tr -d '\0')"
+while :; do
+	case $1 in
+		-h|--help)
+			show_help
+			exit
+			;;
+		-e|--encrypt)
+			encrypt='-F encrypt='
+			;;
+		-f|--file)
+			if [ "$2" ]; then
+				file=$2
+				if [ ! "$title" ]; then
+					title=$file
+				fi
+				shift
 			else
-				die "Could not read from ${file}"
+				die 'ERROR: "--file requires a non-empty option argument.'
 			fi
-		elif [[ -n "${execute[*]}" ]]
-		then
-			content="$( bash -c "${execute[*]}" 2>&1 ||: )"
-		else
-			content="$(</dev/stdin)"
-		fi
+			;;
+		--file=?*)
+			file=${1#*=}
+			title=$file
+			;;
+		--file=)	# Handle the case of an empty --file=
+			die 'ERROR: "--file requires a non-empty option argument.'
+			;;
+		-s|--single)
+			single='-F single='
+			expiration=
+			;;
+		-t|--title)
+			if [ "$2" ]; then
+				title=$2
+				shift
+			else
+				die 'ERROR: --title requires a non-empty option argument'
+			fi
+			;;
+		--title=?*)
+			title=${1#*=}
+			;;
+		--title=)	# Handle the case of an empty --title=
+			die 'ERROR: --title requires a non-empty option argument'
+			;;
+		-x|--expiration)
+			if [ "$2" ]; then
+				expiration=$2
+				shift
+			else
+				die 'ERROR: --expiration requires a non-empty option argument'
+			fi
+			;;
+		--expiration=?*)
+			expiration=${1#*=}
+			;;
+		--expiration=)	# Handle the case of an empty --expiration=
+			die 'ERROR: --expiration requires a non-empty option argument'
+			;;
+		--)		# End of all options
+			shift
+			execute=("$@")
+			if [ ! "$title" ]; then
+				title=${execute[*]}
+			fi
+			break
+			;;
+		-?*)
+			printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+			;;
+		*)		# Default case: No more options, so break out of the loop.
+			break
+	esac
+	shift
+done
+
+
+# do some sanity checks
+
+if [ "$expiration" ] && [ "$single" ]; then
+    die 'option -x|--expiration and -s|--single are mutually exclusive'
+fi
+
+if [ "${execute[*]}" ] && [ "$file" ]; then
+    die "-f|--file and -- <command> are mutually exclusive"
+fi
+
+# set title to unknown if empty
+
+if [ ! "$title" ]; then
+	title=untitled
+fi
+
+
+# read contents
+
+if [ "$execute" ]; then		# input from an executed command
+	exec {content_fd}< <("${execute[@]}" 2>&1)
+elif [ "$file" ]; then		# input from a file
+	if [ -r "$file" ]; then
+		exec {content_fd}< "$file"
+	else
+		die "Could not read from file \"$file\""
 	fi
-
-	# expiration needs to be set to disabled
-	if [ -z "${expiration}" ]
-	then
-		expiration="-1"
-	fi
-
-	# alternative titles if possible
-	if [ -z "${title}" ]
-	then
-		if [ -n "${file}" ]
-		then
-			title="${file}"
-		elif [ -n "${execute[*]}" ]
-		then
-			title="${execute[@]}"
-		fi
-	fi
-
-}
+else	# read from stdin
+	exec {content_fd}< /dev/fd/0
+fi
 
 
-# just do it now
-paste_it() {
+# expiration needs to be set to -1 if disabled
 
-	content=$(echo -n "${content}" | base64)
-	payload="{
-            \"content\": \"${content}\",
-            \"title\": \"${title}\",
-            \"expiration\": \"${expiration}\",
-            \"encrypt\": ${encrypt},
-            \"single\": ${single},
-            \"base64\": true
-          }"
+if [ ! "${expiration}" ]; then
+	expiration="-1"
+fi
 
-	echo -n $payload | curl \
-                      -X POST \
-                      -H "Content-Type: application/json" \
-                      --data-binary @- \
-                      ${PASTEY_ENDPOINT}; echo
-}
 
-## main execution
+# upload
 
-parse_params $*
-parse_options
-paste_it
+curl \
+	-X POST \
+	-F "cli=" \
+	-F "title=$title" \
+	-F "content=</dev/fd/$content_fd" \
+	-F "expiration=$expiration" \
+	${encrypt} \
+	${single} \
+	"${PASTEY_ENDPOINT}"
+echo
 
-# exit cleanly
-trap - SIGINT SIGTERM ERR EXIT
-exit 0
+exec {content_fd}<&-
