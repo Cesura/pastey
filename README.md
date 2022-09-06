@@ -25,7 +25,7 @@ A lightweight, self-hosted paste platform
 ### Dark
 ![dark](https://i.imgur.com/SXeSa5d.png)
 ### CLI
-![screenshot5](https://i.imgur.com/FFWGe43.png)
+![screenshot5](https://i.imgur.com/kV7q1Zv.png)
 
 # Installation
 ### Docker
