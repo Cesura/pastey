@@ -1,12 +1,13 @@
 from __main__ import guess, app
 from . import config, common
 
-from os import path, remove
+from os import path, remove, listdir
 from pathlib import Path
 from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
 import time
-import uuid
+import secrets
+import math
 import json
 from os import environ
 
@@ -83,12 +84,13 @@ def delete_paste(unique_id):
 
 # Create new paste
 def new_paste(title, content, source_ip, expires=0, single=False, encrypt=False, language="AUTO"):
-    unique_id = str(uuid.uuid4())
+    # this calculates the number of digits of a base64 number needed to be unlikely to have collisions
+    id_len = int(math.ceil( 3*math.log(len(listdir(config.data_directory))+1)/math.log(256) + 1.5 ))    unique_id = secrets.token_urlsafe(id_len)
     output_file = config.data_directory + "/" + unique_id
 
     # Check for existing paste id (unlikely)
     while path.exists(output_file) or path.exists(output_file + ".expires"):
-        unique_id = str(uuid.uuid4())
+        unique_id = secrets.token_urlsafe(id_len)
         output_file = config.data_directory + "/" + unique_id
 
     # Attempt to guess programming language
