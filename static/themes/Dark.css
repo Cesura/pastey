@@ -1,4 +1,4 @@
-body, tr {
+body, table.table tr {
     background-color: #262626 !important;
     color: rgba(255, 255, 255);
 }
@@ -111,3 +111,5 @@ li.L0,li.L2,li.L4,li.L6,li.L8 {
 .opn, .clo {
     color: rgb(218, 218, 0);
 }
+
+
