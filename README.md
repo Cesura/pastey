@@ -37,10 +37,10 @@ Change **/path/to/local/dir** to a local folder you would like to use for persis
 
 Pastey will then be accessible at *http://localhost:5000*
 
-### Docker (non-AVX processor)
-If your processor does not have support for AVX instructions, the "latest" image will fail to run. This is due to a decision by Tensorflow to enable this compile flag by default in version 1.5+. However, Anaconda's distribution of Tensorflow supports older architectures even in the 2.x line. You can instead use the image tagged ***latest-conda***:
+### Docker (slim image OR non-AVX processor)
+If you're interested in a slimmer image (or your processor does not have support for AVX instructions required by Tensorflow), a slim image without language detection is also maintained:
 ```
-$ docker run -d -p 5000:5000 -v /path/to/local/dir:/app/data cesura/pastey:latest-conda
+$ docker run -d -p 5000:5000 -v /path/to/local/dir:/app/data cesura/pastey:latest-slim
 ```
 
 ### docker-compose
