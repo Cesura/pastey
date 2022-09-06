@@ -141,30 +141,29 @@
 
 
       <div class="collapse mt-3" style="text-align: left !important; margin-left:25%;" id="script-help">
-<br /><pre>Usage: pastey [-h] [-v] [-f] -p param_value arg1 [arg2...]
+<br /><pre>Usage: pastey [-h] [-e] [-f INFILE] [-s] [-t title] [-x time_hrs] [-- command]
 
-Script description here.
-
-Available options:
-
--h, --help      Print this help and exit
--v, --verbose   Print script debug info
--c, --content   Pass the content of the paste in a simple argument
--e, --encrypt   Encrypt the paste content
--f, --file		Read the content from this file. If file is "-", read from stdin
--s, --single    Create a paste that expires after the first view
--t, --title     Set the title of the paste
--x, --expiration
-Set the time in hours after which the paste expires
-
---              Stop further option parsing
-Arguments passed after the -- option are evaluated
-as a command, and that command's output is pasted.
-The full command is used a the title.
-
-If zero arguments are passed,
-or none of --content, --file or -- are passed,
-content is read from stdin.</pre>
+  CLI interface to pastey.
+  
+  Available options:
+  
+  -h, --help      Print this help and exit
+  -e, --encrypt   Encrypt the paste content
+  -f, --file		Read the content from this file.
+  -s, --single    Create a paste that expires after the first view
+  -t, --title     Set the title of the paste
+  -x, --expiration
+                  Set the time in hours after which the paste expires
+                  (Default is expiration is disabled)
+                      
+  --              Stop further option parsing
+                  Arguments passed after the -- option are evaluated
+                  as a command, and that command's output is pasted.
+                  The full command is used as the title.
+  
+  If zero arguments are passed,
+  or none of --file or -- are passed,
+  content is read from stdin.</pre>
       </div>
 
               
