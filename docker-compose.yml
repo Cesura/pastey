@@ -2,9 +2,7 @@ services:
   pastey:
     image: cesura/pastey:latest
     environment:
-      PASTEY_WORKERS: 2
-      PASTEY_THREADS: 4
-      PASTEY_LISTEN_PORT: 7778
+      PASTEY_LISTEN_PORT: 5000
       PASTEY_DEFAULT_THEME: Dark
       PASTEY_BEHIND_PROXY: "true"
       PASTEY_FORCE_SHOW_RECENT: "true"

@@ -60,3 +60,6 @@ force_https_links = False
 # Note: exclude the http:// or https:// prefix, as well as anything 
 # following the domain (except the port, if applicable)
 override_domain = ""
+
+# Minumum number of characters for generated URLs
+minimum_url_length = 5

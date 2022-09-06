@@ -1,4 +1,6 @@
-from __main__ import guess, app
+from __main__ import app
+from __main__ import guess    # Intentionally put on a separate line
+
 from . import config, common
 
 from os import path, remove, listdir
@@ -85,12 +87,13 @@ def delete_paste(unique_id):
 # Create new paste
 def new_paste(title, content, source_ip, expires=0, single=False, encrypt=False, language="AUTO"):
     # this calculates the number of digits of a base64 number needed to be unlikely to have collisions
-    id_len = int(math.ceil( 3*math.log(len(listdir(config.data_directory))+1)/math.log(256) + 1.5 ))    unique_id = secrets.token_urlsafe(id_len)
+    id_len = int(math.ceil( 3*math.log(len(listdir(config.data_directory))+1)/math.log(256) + 1.5 ))
+    unique_id = secrets.token_urlsafe(id_len if id_len >= config.minimum_url_length else config.minimum_url_length)
     output_file = config.data_directory + "/" + unique_id
 
     # Check for existing paste id (unlikely)
     while path.exists(output_file) or path.exists(output_file + ".expires"):
-        unique_id = secrets.token_urlsafe(id_len)
+        unique_id = secrets.token_urlsafe(id_len if id_len >= config.minimum_url_length else config.minimum_url_length)
         output_file = config.data_directory + "/" + unique_id
 
     # Attempt to guess programming language

@@ -9,9 +9,6 @@ sed -i '/^[^#]/ s/\(^.*language = guesses.*$\)/        language = "Plaintext"/' 
 sed -i '/^[^#]/ s/\(^.*from guesslang import Guess.*$\)/#\ \1/' app.py
 sed -i '/^[^#]/ s/\(^.*guess = Guess().*$\)/#\ \1/' app.py
 
-# Patch common.py
-sed -i '/^[^#]/ s/\(^.*from __main__ import guess.*$\)/#\ \1/' pastey/common.py
-
 # Patch templates/new.html
 sed -i '/^.*value="AUTO".*$/d' templates/new.html
 

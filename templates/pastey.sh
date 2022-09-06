@@ -22,7 +22,7 @@ show_help() {
 	--              Stop further option parsing
 	                Arguments passed after the -- option are evaluated
 	                as a command, and that command's output is pasted.
-	                The full command is used a the title.
+	                The full command is used as the title.
 
 	If zero arguments are passed,
 	or none of --file or -- are passed,
