@@ -1,4 +1,4 @@
-Flask==1.1.2
-Flask-Limiter==1.4
-guesslang==2.2.1
-cryptography==3.4.7
+Flask~=2.2.2
+Flask-Limiter~=2.6.2
+guesslang-experimental~=2.2.3
+cryptography~=3.4.7
