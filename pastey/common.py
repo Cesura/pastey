@@ -1,11 +1,12 @@
 from . import config
+if __name__ == '__main__':
+    from __main__ import guess
+else:
+    from app import guess
 import ipaddress
 from os import path
 from pathlib import Path
 from datetime import datetime, timedelta
-
-# Supported languages (required for non-guesslang builds)
-supported_languages = ['Assembly', 'Batchfile', 'C', 'C#', 'C++', 'Clojure', 'CMake', 'COBOL', 'CoffeeScript', 'CSS', 'CSV', 'Dart', 'DM', 'Dockerfile', 'Elixir', 'Erlang', 'Fortran', 'Go', 'Groovy', 'Haskell', 'HTML', 'INI', 'Java', 'JavaScript', 'JSON', 'Julia', 'Kotlin', 'Lisp', 'Lua', 'Makefile', 'Markdown', 'Matlab', 'Objective-C', 'OCaml', 'Pascal', 'Perl', 'PHP', 'PowerShell', 'Prolog', 'Python', 'R', 'Ruby', 'Rust', 'Scala', 'Shell', 'SQL', 'Swift', 'TeX', 'TOML', 'TypeScript', 'Verilog', 'Visual Basic', 'XML', 'YAML']
 
 ########## Common functions ##########
 
@@ -15,7 +16,7 @@ def verify_whitelist(ip):
 
     # Check blacklist
     for network in config.blacklist_cidr:
-        if address in ipaddress.IPv4Network(network):
+        if address in ipaddress.ip_network(network):
             return False
 
     if not config.use_whitelist:
@@ -23,7 +24,7 @@ def verify_whitelist(ip):
 
     # Check whitelist
     for network in config.whitelist_cidr:
-        if address in ipaddress.IPv4Network(network):
+        if address in ipaddress.ip_network(network):
             return True
     
     return False
@@ -68,7 +69,7 @@ def get_themes():
 
 # Get a list of all supported languages from guesslang
 def get_languages():
-    return supported_languages
+    return guess.supported_languages
 
 # Get file path from unique id
 # This is a wrapper to check for files with the .expires extension
