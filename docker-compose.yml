@@ -10,7 +10,7 @@ services:
       PASTEY_WHITELIST_CIDR: "127.0.0.1/32,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
       PASTEY_RECENT_PASTES: 20
     volumes:
-     - "pastey-data:/app/data"
+      - "pastey-data:/app/data"
     ports:
       - "5000:5000"
     restart: unless-stopped
