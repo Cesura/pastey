@@ -107,3 +107,30 @@ def build_url(request, path="/"):
         protocol = request.url.split('//')[0] if not config.force_https_links else "https:"
 
     return protocol + "//" + domain + path
+
+def expiry_values():
+    return [{
+        "value": -1,
+        "label": "Expires never",
+    }, {
+        "value": 1,
+        "label": "Expires in 1 hour",
+    }, {
+        "value": 6,
+        "label": "Expires in 6 hours",
+    }, {
+        "value": 24,
+        "label": "Expires in 1 day",
+    }, {
+        "value": 72,
+        "label": "Expires in 3 days",
+    }, {
+        "value": 168,
+        "label": "Expires in 1 week",
+    }, {
+        "value": 672,
+        "label": "Expires in 4 weeks",
+    }, {
+        "value": 8760,
+        "label": "Expires in 1 year",
+    }]

@@ -39,6 +39,7 @@ config.show_cli_button = bool(strtobool(environ["PASTEY_SHOW_CLI_BUTTON"])) if "
 config.force_https_links = bool(strtobool(environ["PASTEY_FORCE_HTTPS_LINKS"])) if "PASTEY_FORCE_HTTPS_LINKS" in environ else config.force_https_links
 config.override_domain = environ["PASTEY_OVERRIDE_DOMAIN"] if "PASTEY_OVERRIDE_DOMAIN" in environ else config.override_domain
 config.minimum_url_length = int(environ["PASTEY_MINIMUM_URL_LENGTH"]) if "PASTEY_MINIMUM_URL_LENGTH" in environ else config.minimum_url_length
+config.default_paste_expiry = int(environ["PASTEY_DEFAULT_PASTE_EXPIRY"]) if "PASTEY_DEFAULT_PASTE_EXPIRY" in environ else config.default_paste_expiry
 
 # Main loop
 if __name__ == "__main__":

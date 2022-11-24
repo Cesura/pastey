@@ -138,14 +138,9 @@
                   </div>
                   <div class="col-md-2">
                     <select class="form-select form-select-md mb-3 pastey-select" id="expiration" name="expiration">
-                      <option value="-1" selected>Expires never</option>
-                      <option value="1">Expires in 1 hour</option>
-                      <option value="6">Expires in 6 hours</option>
-                      <option value="24">Expires in 1 day</option>
-                      <option value="72">Expires in 3 days</option>
-                      <option value="168">Expires in 1 week</option>
-                      <option value="672">Expires in 4 weeks</option>
-                      <option value="8760">Expires in 1 year</option>
+                        {% for expiration in expiry_values %}
+                            <option value="{{ expiration.value }}" {% if expiration.value == default_paste_expiry %}selected{% endif %}>{{ expiration.label }}</option>
+                        {% endfor %}
                     </select>
                   </div>
                   <div class="col-md-2">

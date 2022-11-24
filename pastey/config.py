@@ -63,3 +63,5 @@ override_domain = ""
 
 # Minumum number of characters for generated URLs
 minimum_url_length = 5
+
+default_paste_expiry = -1

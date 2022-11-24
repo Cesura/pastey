@@ -42,11 +42,14 @@ def home():
 @app.route("/new")
 def new():
     whitelisted = common.verify_whitelist(common.get_source_ip(request))
+    expiry_values = common.expiry_values()
     return render_template("new.html",
         whitelisted=whitelisted,
         languages=supported_languages,
         active_theme=common.set_theme(request),
-        themes=loaded_themes)
+        themes=loaded_themes,
+        expiry_values=expiry_values,
+        default_paste_expiry=config.default_paste_expiry)
 
 # Config page
 @app.route("/config")
