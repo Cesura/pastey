@@ -4,7 +4,7 @@ body, table.table tr {
 }
 
 .pastey-logo {
-    background-image: url('/static/img/pastey-dark.png');
+    /* background-image: url('/static/img/pastey-dark.png'); */
 }
 
 .pastey-navbar {

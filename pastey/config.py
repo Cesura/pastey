@@ -13,7 +13,7 @@ listen_port = 5000
 use_whitelist = True
 
 # Whitelist CIDR
-whitelist_cidr = ['127.0.0.1/32', '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']
+whitelist_cidr = ['127.0.0.1/32', '10.0.0.0/8', '172.16.0.0/12']
 
 # Blacklist CIDR
 blacklist_cidr = []
@@ -32,6 +32,9 @@ recent_pastes = 10
 
 # Try to use X-Real-IP or X-Forwarded-For HTTP headers
 behind_proxy = False
+
+# handle path while after reverse proxy,
+handle_path = "pastey" 
 
 # Default theme to display to users
 default_theme = "Light"
