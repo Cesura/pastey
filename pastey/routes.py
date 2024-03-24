@@ -43,7 +43,6 @@ def home():
 @app.route("/new")
 def new():
     whitelisted = common.verify_whitelist(common.get_source_ip(request))
-    print("handle_path: " + common.handle_path(request))
     return render_template("new.html",
         whitelisted=whitelisted,
         languages=supported_languages,
