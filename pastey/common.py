@@ -106,4 +106,33 @@ def build_url(request, path="/"):
     else:
         protocol = request.url.split('//')[0] if not config.force_https_links else "https:"
 
-    return protocol + "//" + domain + path
+    if path.startswith("/"):
+        path = path[1:]
+
+    hp = handle_path(request)
+
+    return protocol + "//" + domain + "/" + hp + path
+
+def redirect_url(request, path="/"):
+    if path.startswith("/"):
+        path = path[1:]
+
+    hp = handle_path(request)
+
+    return "/" + hp + path
+
+def handle_path(request):
+
+    behind_proxy = config.behind_proxy
+    if not behind_proxy:
+        return ""
+
+    # only detect reverse proxy HEADER, enable **handle_path**
+    if not 'X-Forwarded-Proto' in request.headers and not 'X-Forwarded-Port' in request.headers:
+        return ""
+
+    handle_path = config.handle_path.strip()
+
+    if handle_path:
+        handle_path += "/"
+    return handle_path

@@ -31,7 +31,10 @@ guess_threshold = 0.20
 recent_pastes = 10
 
 # Try to use X-Real-IP or X-Forwarded-For HTTP headers
-behind_proxy = False
+behind_proxy = True
+
+# handle path while after reverse proxy,
+handle_path = "pastey" 
 
 # Default theme to display to users
 default_theme = "Light"
