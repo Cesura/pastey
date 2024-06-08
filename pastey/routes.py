@@ -36,7 +36,8 @@ def home():
         themes=loaded_themes,
         force_show_recent=config.force_show_recent,
         show_cli_button=config.show_cli_button,
-        script_url=common.build_url(request, "/pastey"))
+        script_url=common.build_url(request, "/pastey"),
+        handle_path=common.handle_path(request))
 
 # New paste page
 @app.route("/new")
@@ -46,7 +47,8 @@ def new():
         whitelisted=whitelisted,
         languages=supported_languages,
         active_theme=common.set_theme(request),
-        themes=loaded_themes)
+        themes=loaded_themes,
+        handle_path=common.handle_path(request))
 
 # Config page
 @app.route("/config")
@@ -60,7 +62,8 @@ def config_page():
         script_url=common.build_url(request, "/pastey"),
         whitelisted=whitelisted,
         active_theme=common.set_theme(request),
-        themes=loaded_themes)
+        themes=loaded_themes,
+        handle_path=common.handle_path(request))
 
 # View paste page
 @app.route("/view/<unique_id>")
@@ -73,7 +76,8 @@ def view(unique_id):
             url=common.build_url(request, "/view/" + unique_id),
             whitelisted=common.verify_whitelist(common.get_source_ip(request)),
             active_theme=common.set_theme(request),
-            themes=loaded_themes)
+            themes=loaded_themes,
+            handle_path=common.handle_path(request))
     else:
         abort(404)
         
@@ -96,7 +100,7 @@ def delete(unique_id):
         abort(401)
 
     functions.delete_paste(unique_id)
-    return redirect("/")
+    return redirect(common.redirect_url(request, "/"))
 
 # Script download
 @app.route("/pastey")
@@ -127,7 +131,7 @@ def paste():
         if 'cli' in request.form:
             abort(400)
         else:
-            return redirect("/new")
+            return redirect(common.redirect_url(request, "/new"))
     else:
 
         # Verify form options
@@ -145,12 +149,12 @@ def paste():
             if 'cli' in request.form:
                 return common.build_url(request, "/view/" + unique_id + "#" + quote(key)), 200
             else:
-                return redirect("/view/" + unique_id + "#" + quote(key))
+                return redirect(common.redirect_url(request, "/view/" + unique_id + "#" + quote(key)))
         else:
             if 'cli' in request.form:
                 return common.build_url(request, "/view/" + unique_id), 200
             else:
-                return redirect("/view/" + unique_id)
+                return redirect(common.redirect_url(request, "/view/" + unique_id))
 
 # POST new raw paste
 @app.route('/raw', methods = ['POST'])

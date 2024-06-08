@@ -31,6 +31,7 @@ config.recent_pastes = int(environ["PASTEY_RECENT_PASTES"]) if "PASTEY_RECENT_PA
 config.whitelist_cidr = environ["PASTEY_WHITELIST_CIDR"].split(",") if "PASTEY_WHITELIST_CIDR" in environ else config.whitelist_cidr
 config.blacklist_cidr = environ["PASTEY_BLACKLIST_CIDR"].split(",") if "PASTEY_BLACKLIST_CIDR" in environ else config.blacklist_cidr
 config.behind_proxy = bool(strtobool(environ["PASTEY_BEHIND_PROXY"])) if "PASTEY_BEHIND_PROXY" in environ else config.behind_proxy
+config.handle_path = environ["PASTEY_HANDLE_PATH"] if "PASTEY_HANDLE_PATH" in environ else config.handle_path
 config.default_theme = environ["PASTEY_DEFAULT_THEME"] if "PASTEY_DEFAULT_THEME" in environ else config.default_theme
 config.purge_interval = int(environ["PASTEY_PURGE_INTERVAL"]) if "PASTEY_PURGE_INTERVAL" in environ else config.purge_interval
 config.force_show_recent = bool(strtobool(environ["PASTEY_FORCE_SHOW_RECENT"])) if "PASTEY_FORCE_SHOW_RECENT" in environ else config.force_show_recent
