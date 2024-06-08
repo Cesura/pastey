@@ -1,6 +1,6 @@
 ![logo](https://i.imgur.com/W22RFJZ.png)
 
-A lightweight, self-hosted paste platform
+A minimal, self-hosted paste platform
 
 # Features
 * Self-contained system without external database dependencies
